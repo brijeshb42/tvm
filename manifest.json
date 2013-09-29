@@ -1,0 +1,14 @@
+{
+	"manifest_version": 2,
+	"name": "TV Show Manager",
+	"version": "1",
+	"app": {
+		"background": {
+			"scripts": ["background.js"]
+		}
+	},
+	"permissions": [
+		"storage","notifications"
+	],
+	"icons": { "16": "tv16.png", "128": "tv128.png" }
+}

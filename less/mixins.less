@@ -1,0 +1,21 @@
+.rounded-corner(@radius: 5px){
+	-webkit-border-radius: @radius;
+  	-moz-border-radius: @radius;
+  	-ms-border-radius: @radius;
+  	-o-border-radius: @radius;
+  	border-radius: @radius;
+}
+
+.shadow(){
+	-webkit-box-shadow: 0 13px 6px @shadow-length @color-shadow;
+	-moz-box-shadow: 0 13px 6px @shadow-length @color-shadow;
+	box-shadow: 0 13px 6px @shadow-length @color-shadow;
+}
+
+.transition(@time: .3s){
+	-webkit-transition: all @time ease;
+	-moz-transition: all @time ease;
+	-ms-transition: all @time ease;
+	-o-transition: all @time ease;
+	transition: all @time ease;
+}
