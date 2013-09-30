@@ -21,59 +21,14 @@
             <h2>TV SHOW MANAGER</h2>
         </div>
         <div id="content">
-            <ul id="todayList" class="show-list" data-ng-show="selectedNav==0">
-                <li class="list-item yesterday">
+            <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
+                <li data-ng-repeat="item in shows" class="list-item {{item.day}}">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
+                        <h3 class="showTitle">{{item.title}}</h3>
+                        <p class="nextShow">Season&nbsp;{{item.season}}&nbsp;Episode&nbsp;{{item.episode}}</p>
                         <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
-                    </div>
-                </li>
-                <li class="list-item yesterday">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
-                    </div>
-                </li>
-                <li class="list-item today">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
-                    </div>
-                </li>
-                <li class="list-item today">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
-                    </div>
-                </li>
-                <li class="list-item today">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
-                    </div>
-                </li>
-                <li class="list-item yet-to-come">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="Show" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
-                        <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
+                        <p class="overview">{{item.overview}}</p>
                     </div>
                 </li>
             </ul>
@@ -104,9 +59,9 @@
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">{{item.title}}</h3>
-                        <p class="nextShow">{{item.air_day}}&nbsp;{{item.air_time}}</p>
+                        <p class="nextShow">{{item.air_day}}&nbsp;{{item.air_time}}&nbsp;on&nbsp;{{item.network}}</p>
+                        <p class="overview">{{item.overview}}</p>
                     </div>
-                    <p class="overview">{{item.overview}}</p>
                 </li>
             </ul>
             <div class="navs">

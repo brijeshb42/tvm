@@ -80,33 +80,8 @@ function SearchShowsController($scope,$http){
 
 function ShowListController($scope){
     $scope.shows = [];
-    /*var db = tv.indexedDB.db;
-    var trans = db.transaction([DB_show],"readwrite");
-    var store = trans.objectStore(DB_show);
-    var request = store.count();
-    request.onsuccess = function(e){
-        if(request.result){
-            var keyRange = IDBKeyRange.lowerBound(0);
-            var cursorRequest = store.openCursor(keyRange);
-            cursorRequest.onsuccess = function(e){
-                var result = e.target.result;
-                console.log(result);
-                if(!!result == false)
-                    return;
-                $scope.shows = result.value;
-                result.continue();
-            }
-            cursorRequest.onerror = function(e){
-                console.log("Error during cursor");
-            }
-        }
-        else{
-            //tv.ui.renderShows(0);
-            console.log("else");
-        }
-    };
-    request.onerror = function(e){
-        console.log("Error opening tv_shows");
-        console.log(e);
-    };*/
+}
+
+function UpcomingController($scope){
+    $scope.shows = [];
 }

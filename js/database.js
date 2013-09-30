@@ -3,6 +3,7 @@ window.IDBTransaction   = window.IDBTransaction || window.webkitIDBTransaction |
 window.IDBKeyRange 		= window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 var tv = {};
+tv.ui = {};
 tv.indexedDB = {};
 var DB = "tv_man";
 var DB_show = "tv_shows";
@@ -36,18 +37,36 @@ tv.indexedDB.open = function(){
 
 	request.onsuccess = function(e){
 		tv.indexedDB.db = e.target.result;
-		/*if(tv.page==1){
-			tv.indexedDB.getUpcoming();
-		}else if(tv.page==2){
-			tv.indexedDB.getTodayCount();
-		}else if(tv.page==3){
-			tv.indexedDB.getAllShows();
-		}*/
 		console.log("DB Opened.");
 		tv.indexedDB.getAllShows();
+		tv.indexedDB.getUpcoming();
 	};
 
 	request.onerror = tv.indexedDB.onerror;
+};
+
+tv.ui.getDate = function(d){
+	if(d==null){
+		d=0;
+	}
+	var yDate = "";
+	var yest = new Date();
+	yest.setDate(yest.getDate()+d);
+	var dd = yest.getDate();
+	var mm = yest.getMonth()+1;
+	var yyyy = yest.getFullYear();
+	if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+		yDate = yyyy+'-'+mm+'-'+dd;
+	return yDate;
+};
+
+tv.ui.formatDate =  function(date){
+		if(date==null || date==undefined || date.length<10){
+			return "Not specified";
+		}
+		var d = date.split('-');
+		var dt = d[2]+'-'+d[1]+'-'+d[0];
+		return dt;
 };
 
 tv.indexedDB.addShow = function(show){
@@ -287,20 +306,33 @@ tv.indexedDB.getUpcoming = function(){
 	var trans = db.transaction([DB_epi],"readwrite");
 	var store = trans.objectStore(DB_epi);
 	var y = tv.ui.getDate(-1);
-	var n = tv.ui.getDate(3);
+	var n = tv.ui.getDate(6);
 	console.log(y+' '+n);
 	var index = store.index("airdate");
 	var range = IDBKeyRange.bound(y, n,false,false);
 	var req = index.openCursor(range);
+	var scope = angular.element($("#todayList")).scope();
 	req.onsuccess = function(e){
 		var cursor = e.target.result;
+		scope.$apply(function(){
+			scope.shows = [];
+		});
 		if(cursor){
-			tv.ui.renderUpcoming(cursor.value);
+			//tv.ui.renderUpcoming(cursor.value);
+			scope.$apply(function(){
+				scope.shows.push(cursor.value);
+			});
 			//console.log(cursor.value);
 			cursor.continue();
+		}else{
+			scope.$apply(function(){
+				scope.shows.push({title:"No upcoming shows",season:"",episode:"",overview:""});
+			});
+			console.log("else");
+			console.log(cursor);
 		}
 	};
 	req.onerror = function(){
-		bootbox.alert("Error opening DB.");
+		console.log("Error opening DB.");
 	};
 };
