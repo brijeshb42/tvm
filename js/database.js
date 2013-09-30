@@ -3,7 +3,6 @@ window.IDBTransaction   = window.IDBTransaction || window.webkitIDBTransaction |
 window.IDBKeyRange 		= window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 var tv = {};
-tv.page = 1;
 tv.indexedDB = {};
 var DB = "tv_man";
 var DB_show = "tv_shows";
@@ -12,7 +11,7 @@ var DB_img = "tv_images";
 
 tv.indexedDB.db = null;
 tv.indexedDB.open = function(){
-	var version = 2;
+	var version = 1;
 	var request = indexedDB.open(DB,version);
 
 	request.onupgradeneeded = function(e){
@@ -22,26 +21,29 @@ tv.indexedDB.open = function(){
 			db.deleteObjectStore(DB);
 		}
 		var store = db.createObjectStore(DB_show,{keyPath:"showid"});
-		store.createIndex("name","name",{unique:false});
-		store.createIndex("day","day",{unique:false});
+		store.createIndex("title","title",{unique:false});
+		store.createIndex("air_day","air_day",{unique:false});
 		store.createIndex("deleted","deleted",{unique:false});
+
 		var store2 = db.createObjectStore(DB_epi,{keyPath:"episodeID"});
 		store2.createIndex("showid","showid",{unique:false});
 		store2.createIndex("airdate","airdate",{unique:false});
 		store2.createIndex("season","season",{unique:false});
 		store2.createIndex("episode","episode",{unique:false});
+
 		var store3 = db.createObjectStore(DB_img,{keyPath:"showid"});
 	};
 
 	request.onsuccess = function(e){
 		tv.indexedDB.db = e.target.result;
-		if(tv.page==1){
-			tv.indexedDB.getAllShows();
+		/*if(tv.page==1){
+			tv.indexedDB.getUpcoming();
 		}else if(tv.page==2){
 			tv.indexedDB.getTodayCount();
 		}else if(tv.page==3){
-			tv.indexedDB.getUpcoming();
-		}
+			tv.indexedDB.getAllShows();
+		}*/
+		console.log("DB Opened.");
 	};
 
 	request.onerror = tv.indexedDB.onerror;
@@ -60,8 +62,6 @@ tv.indexedDB.addShow = function(show){
 	};
 
 	request.onerror = function(e){
-		$("#loadingBar").hide();
-		bootbox.alert("Error");
 		console.log(e);
 	};
 }

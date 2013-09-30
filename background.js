@@ -3,10 +3,8 @@ chrome.app.runtime.onLaunched.addListener(function(){
 		bounds: {
 			width: 450,
 			height: 600
-		}
-	});
-	chrome.app.window.onBoundsChanged.addListener(function(){
-		alert("hello");
+		},
+		resizable: false
 	});
 	/*var notification = webkitNotifications.createNotification(
   		'tv128.png',  // icon url - can be relative

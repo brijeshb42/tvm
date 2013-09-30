@@ -7,8 +7,9 @@
 			"scripts": ["background.js"]
 		}
 	},
+	"offline_enabled": true,
 	"permissions": [
-		"storage","notifications"
+		"storage","notifications","http://*.appspot.com/","http://trakt.us/","http://*.trakt.tv/"
 	],
 	"icons": { "16": "tv16.png", "128": "tv128.png" }
 }

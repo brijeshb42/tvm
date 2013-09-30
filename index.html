@@ -11,22 +11,22 @@
         <script src="js/vendor/jquery-1.10.2.min.js"></script>
         <script src="js/vendor/jquery.mousewheel.min.js"></script>
         <script src="js/vendor/jquery.slimscroll.min.js"></script>
-        <script src="js/index.js"></script>
         <script src="js/vendor/angular.min.js"></script>
+        <script src="js/index.js"></script>
     </head>
-    <body>
+    <body data-ng-app data-ng-csp data-ng-controller="NavController">
         <!--<h1 id="appTitle">TV Show Manager</h1>-->
         <div id="appTitle">
             <h2>TV SHOW MANAGER</h2>
         </div>
         <div id="content">
-            <ul id="todayList" class="show-list">
+            <ul id="todayList" class="show-list" data-ng-show="selectedNav==0">
                 <li class="list-item yesterday">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
@@ -35,7 +35,7 @@
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
@@ -44,7 +44,7 @@
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
@@ -53,7 +53,7 @@
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
@@ -62,65 +62,78 @@
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
                 <li class="list-item yet-to-come">
                     <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
+                        <img src="img/show.jpg" alt="Show" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
-                        <p class="datetime"><small>26 Sep 2013 10:00pm</small></p>
+                        <p class="datetime">26 Sep 2013 10:00pm</p>
                         <p class="overview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aliquam rerum dicta provident beatae eius nemo labore placeat non enim!</p>
                     </div>
                 </li>
             </ul>
-            <div id="addShow" class="show-list">
-                <form id="searchBox" action="#" method="get">
-                    <input type="text" id="searchShow" placeholder="Enter show name" />
-                    <button type="submit">Search</button>
+            <div id="addShow" class="show-list" data-ng-show="selectedNav==1" data-ng-controller="SearchShowsController">
+                <form id="searchBox" method="get" data-ng-submit="getShows()">
+                    <input type="text" id="searchShow" data-ng-model="searchName" placeholder="Enter show name" />
+                    <p class="{{class}}">{{msg}}</p>
                 </form>
-                <ul id="searchList" class="show-list">
+                <ul id="searchList" data-ng-show="isShown">
+                    <li class="list-item"><h2>Search Result for {{searchName}}</h2></li>
+                    <li class="list-item" data-ng-repeat="item in shows">
+                        <div class="autoOverflow showHeader">
+                            <div class="titleBar">
+                                <h3 class="showTitle">{{item.title}}&nbsp;({{item.year}})</h3>
+                                <p class="datetime">{{item.air_day+" "+item.air_time}}</p>
+                            </div>
+                            <div class="controlBar">
+                                <button data-ng-click="saveShow($index)">ADD</button>
+                            </div>
+                        </div>
+                        <p class="overview">{{item.overview}}</p>
+                    </li>
                 </ul>
             </div>
-            <ul id="showList" class="show-list">
-                <li class="list-item yesterday">
+            <ul id="showList" class="show-list" data-ng-show="selectedNav==2">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
                     </div>
                 </li>
-                <li class="list-item yesterday">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
                     </div>
                 </li>
-                <li class="list-item today">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
                     </div>
                 </li>
-                <li class="list-item today">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
                     </div>
                 </li>
-                <li class="list-item yet-to-come">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
                         <p class="nextShow">Season 02 Episode 03</p>
                     </div>
                 </li>
-                <li class="list-item yet-to-come">
+                <li class="list-item">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">Homeland</h3>
@@ -130,9 +143,9 @@
             </ul>
             <div class="navs">
                 <ul class="nav-list">
-                    <li class="active"><a class="navLink" href="#todayList">Today</a></li>
-                    <li><a class="navLink" href="#addShow">Add Shows</a></li>
-                    <li><a class="navLink" href="#showList">Show List</a></li>
+                    <li data-ng-repeat="item in navItems" data-ng-class="{active: $index==selectedNav}">
+                        <a href="{{item.href}}" class="navLink" data-ng-click="changeView($index)">{{item.title}}</a>
+                    </li>
                 </ul>
             </div>
         </div>

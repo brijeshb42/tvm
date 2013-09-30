@@ -51,9 +51,23 @@ body{
 		border-bottom-width: @border-show-item;
 		background: @item-color;
 		.rounded-corner(4px);
+		.transition;
+		h1,h2,h3{
+			margin: 2px;
+			padding: 2px;
+		}
+	}
+	.list-item:hover{
+		border-bottom-color: #222;
+	}
+	.list-item:first-child{
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
 	}
 	.list-item:last-child{
 		margin-bottom: 0;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
 	}
 	.today{
 		border-bottom-color: @color-today;
@@ -75,10 +89,15 @@ body{
 		border: 1px solid @body-back-color;
 		margin-right: 4px;
 	}
+	.titleBar{
+		float: left;
+	}
+	.controlBar{
+		float: right;
+	}
 	.showTitle{
-		//float: left;
 		margin: 0;
-		margin-left: 5px;
+		margin-left: 2px;
 		text-transform: uppercase;
 	}
 	p{
@@ -88,6 +107,8 @@ body{
 		margin: 0;
 		padding: 2px;
 		color: #08c;
+		font-family: sans-serif;
+		text-align: left;
 	}
 	p.overview{
 		text-align: justify;
@@ -146,9 +167,9 @@ body{
 	}
 }
 
-#addShow,#showList{
+/*#addShow,#showList{
 	display: none;
-}
+}*/
 #addShow{
 	text-align: center;
 }
@@ -161,6 +182,10 @@ button,button[type="submit"]{
 	font-family: "Prosto One";
 	padding: 10px 20px;
 	.rounded-corner(5px);
+	.transition;
+}
+button:hover{
+	background-color: @color-yet;
 }
 
 #searchBox{
@@ -181,4 +206,25 @@ button,button[type="submit"]{
 		border-color: @color-focus;
 		outline: 0;
 	}
+	p{
+		font-size: 1em;
+		padding: 0;
+		margin: 0;
+		margin-top: 5px;
+	}
+	p.error{
+		color: @color-yest;
+	}
+	p.message{
+		color: @color-form-text;
+	}
+}
+#searchList{
+	margin: 0;
+	padding: 0;
+	margin-top: 10px;
+}
+
+p.overview{
+	text-align: justify;
 }
