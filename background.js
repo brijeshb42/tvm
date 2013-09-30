@@ -12,4 +12,5 @@ chrome.app.runtime.onLaunched.addListener(function(){
   		'Lorem ipsum...'  // notification body text
 	);
 	notification.show();*/
+	tv.indexedDB.open("back");
 });

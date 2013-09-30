@@ -2,16 +2,84 @@ window.indexedDB 		= window.indexedDB || window.mozIndexedDB || window.webkitInd
 window.IDBTransaction   = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 window.IDBKeyRange 		= window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
+urls = {
+    proxy : "http://b2-apps.appspot.com/",
+    api : "www.thetvdb.com/api/",
+    id : "C973590B1E212580",
+    banner : "www.thetvdb.com/banners/",
+    search : "GetSeries.php",
+    update : "https://dl.dropbox.com/u/51320501/tv-version.json",
+    trakt : "http://api.trakt.tv/",
+    trakt_api : "b3795664d41ef84ecdbf1dae6dfab099",
+    img_url : "slurm.trakt.us/"
+};
+
+u = {
+    search: urls.trakt+"search/shows.json/"+urls.trakt_api+"/",
+    img: urls.proxy+urls.img_url,
+    episode: urls.trakt+"show/season.json/"+urls.trakt_api+"/",
+};
+
 var tv = {};
 tv.ui = {};
+tv.network = {};
 tv.indexedDB = {};
 var DB = "tv_man";
 var DB_show = "tv_shows";
 var DB_epi = "tv_episodes";
 var DB_img = "tv_images";
 
+tv.ui.getDate = function(d){
+	if(d==null){
+		d=0;
+	}
+	var yDate = "";
+	var yest = new Date();
+	yest.setDate(yest.getDate()+d);
+	var dd = yest.getDate();
+	var mm = yest.getMonth()+1;
+	var yyyy = yest.getFullYear();
+	if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+		yDate = yyyy+'-'+mm+'-'+dd;
+	return yDate;
+};
+
+tv.ui.formatDate =  function(date){
+		if(date==null || date==undefined || date.length<10){
+			return "Not specified";
+		}
+		var d = date.split('-');
+		var dt = d[2]+'-'+d[1]+'-'+d[0];
+		return dt;
+};
+
+tv.ui.getDataUrl = function(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/jpeg");
+    //return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    return dataURL;
+};
+
+tv.network.getPoster = function(show){
+	var u = urls.proxy+urls.banner+show.poster;
+	var img = new Image();
+	img.addEventListener("load",function(e){
+		window.removeEventListener("beforeunload",tv.network.progressError,false);
+		var dataUrl = tv.ui.getDataUrl(img);
+		var s = {};
+		s.showid = show.showid;
+		s.poster = dataUrl;
+		tv.indexedDB.savePoster(s);
+	})
+	img.src = u;
+};
+
 tv.indexedDB.db = null;
-tv.indexedDB.open = function(){
+tv.indexedDB.open = function(from){
 	var version = 1;
 	var request = indexedDB.open(DB,version);
 
@@ -38,35 +106,15 @@ tv.indexedDB.open = function(){
 	request.onsuccess = function(e){
 		tv.indexedDB.db = e.target.result;
 		console.log("DB Opened.");
-		tv.indexedDB.getAllShows();
-		tv.indexedDB.getUpcoming();
+		if(from==="back"){
+			tv.indexedDB.getTodayCount();
+		}else{
+			tv.indexedDB.getUpcoming();
+			tv.indexedDB.getAllShows();
+		}
 	};
 
 	request.onerror = tv.indexedDB.onerror;
-};
-
-tv.ui.getDate = function(d){
-	if(d==null){
-		d=0;
-	}
-	var yDate = "";
-	var yest = new Date();
-	yest.setDate(yest.getDate()+d);
-	var dd = yest.getDate();
-	var mm = yest.getMonth()+1;
-	var yyyy = yest.getFullYear();
-	if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
-		yDate = yyyy+'-'+mm+'-'+dd;
-	return yDate;
-};
-
-tv.ui.formatDate =  function(date){
-		if(date==null || date==undefined || date.length<10){
-			return "Not specified";
-		}
-		var d = date.split('-');
-		var dt = d[2]+'-'+d[1]+'-'+d[0];
-		return dt;
 };
 
 tv.indexedDB.addShow = function(show){
@@ -107,9 +155,6 @@ tv.indexedDB.getAllShows = function(){
 				scope.$apply(function(){
 					scope.shows.push(result.value);
 				});
-				//tv.ui.renderShows(result.value);
-				//console.log(result);
-				//tv.indexedDB.getPoster(result.value.showid);
 				result.continue();
 			};
 			cursorRequest.onerror = function(e){
@@ -140,14 +185,11 @@ tv.indexedDB.addEpisodes = function(episodes,show){
     	request.onsuccess = function(e){
 			total++;
 			if(total==episodes.length){
-				bootbox.alert("Episodes added. Downloading poster.",function(){
-					tv.network.getPoster(show);
-				});
+				console.log("Episodes added.");
 			}
 		};
-
 		request.onerror = function(e){
-			console.log(e);
+			console.log("Error adding episode.");
 		};
   	}
 };
@@ -169,7 +211,7 @@ tv.indexedDB.getEpisodes = function(showid){
 	};
 
 	cursorRequest.onerror = function(e){
-		console.log(e);
+		console.log("Error getting episode.");
 	}
 };
 
@@ -185,7 +227,7 @@ tv.indexedDB.deleteShow = function(id) {
   };
 
   request.onerror = function(e) {
-    console.log(e);
+    console.log("Error deleting show.");
   };
 };
 
@@ -236,13 +278,12 @@ tv.indexedDB.savePoster = function(show){
 	var request = store.add(show);
 
 	request.onsuccess = function(e){
-		bootbox.hideAll();
-		bootbox.alert("Poster Saved.");
+		console.log("Poster Saved.");
 		//setTimeout()
 	};
 
 	request.onerror = function(e){
-		bootbox.alert("Error saving poster.");
+		console.log("Error saving poster.");
 		console.log(e);
 	};
 };
@@ -255,7 +296,6 @@ tv.indexedDB.getPoster = function(id){
 	var req = store.get(id);
 	req.onsuccess = function(e){
 		tv.ui.renderImg(req.result);
-		//console.log(req.result);
 	};
 };
 
@@ -291,13 +331,24 @@ tv.indexedDB.getTodayCount = function(){
 	req.onsuccess = function(e){
 		var count = e.target.result;
 		var c = count.toString();
-		//console.log(count);
+		console.log(count);
+		var notification;
 		if(count==0){
-			tv.ui.renderPopup(0);
+			notification = webkitNotifications.createNotification(
+  				'tv128.png',  // icon url - can be relative
+  				'TV!',  // notification title
+  				'No shows today.'  // notification body text
+			);
+			//tv.ui.renderPopup(0);
 		}
 		else{
-			tv.indexedDB.getToday();
+			notification = webkitNotifications.createNotification(
+  				'tv128.png',  // icon url - can be relative
+  				'TV!',  // notification title
+  				count+' shows today.'  // notification body text
+			);
 		}
+		notification.show();
 	};
 };
 
@@ -312,24 +363,28 @@ tv.indexedDB.getUpcoming = function(){
 	var range = IDBKeyRange.bound(y, n,false,false);
 	var req = index.openCursor(range);
 	var scope = angular.element($("#todayList")).scope();
+	scope.$apply(function(){
+		scope.shows = [];
+	});
 	req.onsuccess = function(e){
 		var cursor = e.target.result;
-		scope.$apply(function(){
-			scope.shows = [];
-		});
+		//console.log(cursor);
 		if(cursor){
-			//tv.ui.renderUpcoming(cursor.value);
+			var up = cursor.value;
+			var dt = tv.ui.getDate(0);
+			if(up.airdate<dt){
+				up.day = "yesterday"
+			}else if(up.airdate==dt){
+				up.day = "today";
+			}else if(up.airdate>dt){
+				up.day = "yet-to-come";
+			}
+			up.airdate = tv.ui.formatDate(up.airdate);
 			scope.$apply(function(){
-				scope.shows.push(cursor.value);
+				scope.shows.push(up);
 			});
-			//console.log(cursor.value);
+			console.log(cursor.value);
 			cursor.continue();
-		}else{
-			scope.$apply(function(){
-				scope.shows.push({title:"No upcoming shows",season:"",episode:"",overview:""});
-			});
-			console.log("else");
-			console.log(cursor);
 		}
 	};
 	req.onerror = function(){

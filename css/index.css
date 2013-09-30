@@ -507,6 +507,10 @@ body {
   padding: 0;
   margin: 0;
   margin-right: 10px;
+  /*.list-item:hover{
+		border-bottom-color: #222;
+	}*/
+
 }
 .show-list .list-item {
   padding: 10px;
@@ -530,9 +534,6 @@ body {
 .show-list .list-item h3 {
   margin: 2px;
   padding: 2px;
-}
-.show-list .list-item:hover {
-  border-bottom-color: #222;
 }
 .show-list .list-item:first-child {
   border-bottom-left-radius: 0;
@@ -580,6 +581,9 @@ body {
   color: #08c;
   font-family: sans-serif;
   text-align: left;
+}
+.showHeader p.datetime .day {
+  text-transform: uppercase;
 }
 .showHeader p.overview {
   text-align: justify;
@@ -667,7 +671,6 @@ button:hover {
   background-color: #14a225;
 }
 #searchBox {
-  width: 95%;
   border: 1px solid #ccc;
   text-align: center;
   padding: 10px;

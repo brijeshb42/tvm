@@ -1,21 +1,3 @@
-urls = {
-    proxy : "http://b2-apps.appspot.com/",
-    api : "www.thetvdb.com/api/",
-    id : "C973590B1E212580",
-    banner : "www.thetvdb.com/banners/",
-    search : "GetSeries.php",
-    update : "https://dl.dropbox.com/u/51320501/tv-version.json",
-    trakt : "http://api.trakt.tv/",
-    trakt_api : "b3795664d41ef84ecdbf1dae6dfab099",
-    img_url : "slurm.trakt.us/"
-};
-
-u = {
-    search: urls.trakt+"search/shows.json/"+urls.trakt_api+"/",
-    img: urls.proxy+urls.img_url,
-    episode: urls.trakt+"show/season.json/"+urls.trakt_api+"/",
-};
-
 (function($){
     $(window).load(function(){
     	$('a').on("click",function(){
@@ -31,9 +13,9 @@ u = {
 
 function NavController($scope){
     $scope.selectedNav = 0;
-    $scope.navItems = [{href:"#todayList",title:"Today"},
+    $scope.navItems = [{href:"#todayList",title:"Recent"},
                        {href:"#addShow",title:"Add Shows"},
-                       {href:"#showList",title:"Shows List"}];
+                       {href:"#showList",title:"All Shows"}];
     $scope.changeView = function(index){
         $scope.selectedNav = index;
         if($scope.selectedNav==1){
@@ -75,6 +57,48 @@ function SearchShowsController($scope,$http){
         d.showid = d.tvdb_id;
         delete d["tvdb_id"];
         tv.indexedDB.addShow(d);
+        console.log(d);
+        $http({method: 'GET',url:urls.proxy+urls.api+urls.id+"/series/"+d.showid+"/all/en.xml"}).
+            success(function(data,status,header,config){
+                var show = {};
+                $(data).find("Series").each(function(){
+                    show.showid = $(this).find("id").text();
+                    show.poster = $(this).find("poster").text();
+                    show.name = $(this).find("SeriesName").text();
+                });
+                var episodes = [];
+                $(data).find("Episode").each(function(){
+                    var epi = {};
+                    epi.name = $(this).find("EpisodeName").text();
+                    epi.showname = show.name;
+                    epi.showid = $(this).find("seriesid").text();
+                    epi.episodeID = $(this).find("id").text();
+                    epi.overview = $(this).find("Overview").text();
+                    epi.guestStars = $(this).find("GuestStars").text();
+                    epi.airdate = $(this).find("FirstAired").text();
+                    epi.season = $(this).find("SeasonNumber").text();
+                    epi.episode = $(this).find("EpisodeNumber").text();
+                    epi.lastUpdated = $(this).find("lastupdated").text();
+                    episodes.push(epi);
+                });
+                //console.log(episodes);
+                tv.indexedDB.addEpisodes(episodes,show);
+            }).
+            error(function(data,status,header,config){
+                $scope.msg = "There was an error while downloading episode list.";
+                $scope.class = "error";
+            });
+        /*var u = urls.proxy+urls.banner+show.poster;
+        var img = new Image();
+        img.addEventListener("load",function(e){
+            //window.removeEventListener("beforeunload",tv.network.progressError,false);
+            var dataUrl = tv.ui.getDataUrl(img);
+            var s = {};
+            s.showid = show.showid;
+            s.poster = dataUrl;
+            tv.indexedDB.savePoster(s);
+        });
+        img.src = u;*/
     };
 }
 
@@ -83,5 +107,5 @@ function ShowListController($scope){
 }
 
 function UpcomingController($scope){
-    $scope.shows = [];
+    $scope.shows = [{showname:"Loading..."}];
 }

@@ -25,9 +25,10 @@
                 <li data-ng-repeat="item in shows" class="list-item {{item.day}}">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">{{item.title}}</h3>
+                        <h3 class="showTitle">{{item.showname}}</h3>
+                        <h4 class="showTitle">{{item.name}}</h4>
                         <p class="nextShow">Season&nbsp;{{item.season}}&nbsp;Episode&nbsp;{{item.episode}}</p>
-                        <p class="datetime">26 Sep 2013 10:00pm</p>
+                        <p class="datetime">{{item.airdate}}&nbsp;<span class="day">({{item.day}})</span></p>
                         <p class="overview">{{item.overview}}</p>
                     </div>
                 </li>
@@ -60,7 +61,7 @@
                         <img src="img/show.jpg" alt="" class="showImg">
                         <h3 class="showTitle">{{item.title}}</h3>
                         <p class="nextShow">{{item.air_day}}&nbsp;{{item.air_time}}&nbsp;on&nbsp;{{item.network}}</p>
-                        <p class="overview">{{item.overview}}</p>
+                        
                     </div>
                 </li>
             </ul>
