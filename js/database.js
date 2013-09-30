@@ -23,7 +23,7 @@ tv.indexedDB.open = function(){
 		var store = db.createObjectStore(DB_show,{keyPath:"showid"});
 		store.createIndex("title","title",{unique:false});
 		store.createIndex("air_day","air_day",{unique:false});
-		store.createIndex("deleted","deleted",{unique:false});
+		//store.createIndex("deleted","deleted",{unique:false});
 
 		var store2 = db.createObjectStore(DB_epi,{keyPath:"episodeID"});
 		store2.createIndex("showid","showid",{unique:false});
@@ -44,6 +44,7 @@ tv.indexedDB.open = function(){
 			tv.indexedDB.getAllShows();
 		}*/
 		console.log("DB Opened.");
+		tv.indexedDB.getAllShows();
 	};
 
 	request.onerror = tv.indexedDB.onerror;
@@ -56,14 +57,12 @@ tv.indexedDB.addShow = function(show){
 	var request = store.add(show);
 
 	request.onsuccess = function(e){
-		bootbox.alert("Show added. Downloading Episode list.",function(){
-			tv.network.getEpisodes(show.showid);
-		});
-	};
-
-	request.onerror = function(e){
-		console.log(e);
-	};
+        console.log("Show Added.");
+        console.log(e);
+    };
+    request.onerror = function(e){
+    	console.log("error add show: "+d.title);
+    }
 }
 
 tv.indexedDB.getAllShows = function(){
@@ -71,8 +70,13 @@ tv.indexedDB.getAllShows = function(){
 	var trans = db.transaction([DB_show],"readwrite");
 	var store = trans.objectStore(DB_show);
 	var req = store.count();
+	//console.log(req);
+	var scope = angular.element($("#showList")).scope();
 	req.onsuccess = function(e){
-		if(req.result){
+		if(req.result>0){
+			scope.$apply(function(){
+				scope.shows = [];
+			});
 			var keyRange = IDBKeyRange.lowerBound(0);
 			var cursorRequest = store.openCursor(keyRange);
 			cursorRequest.onsuccess = function(e){
@@ -80,22 +84,28 @@ tv.indexedDB.getAllShows = function(){
 				//console.log(result);
 				if(!!result == false)
 					return;
-				tv.ui.renderShows(result.value);
+				console.log(result.value);
+				scope.$apply(function(){
+					scope.shows.push(result.value);
+				});
+				//tv.ui.renderShows(result.value);
 				//console.log(result);
-				tv.indexedDB.getPoster(result.value.showid);
+				//tv.indexedDB.getPoster(result.value.showid);
 				result.continue();
 			};
 			cursorRequest.onerror = function(e){
-				bootbox.alert("Error.");
+				console.log("Error.");
 				console.log(e);
 			};
 		}
 		else{
-			tv.ui.renderShows(0);
+			scope.$apply(function(){
+				scope.shows = [{title:"No Show Added Yet.",next:"",overview:""}];
+			});
 		}
 	};
 	req.onerror = function(e){
-		bootbox.alert("Error.");
+		console.log("Error.");
 		console.log(e);
 	}
 };

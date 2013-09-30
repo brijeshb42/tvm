@@ -12,6 +12,7 @@
         <script src="js/vendor/jquery.mousewheel.min.js"></script>
         <script src="js/vendor/jquery.slimscroll.min.js"></script>
         <script src="js/vendor/angular.min.js"></script>
+        <script src="js/database.js"></script>
         <script src="js/index.js"></script>
     </head>
     <body data-ng-app data-ng-csp data-ng-controller="NavController">
@@ -97,48 +98,15 @@
                     </li>
                 </ul>
             </div>
-            <ul id="showList" class="show-list" data-ng-show="selectedNav==2">
-                <li class="list-item">
+            <ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
+            <!--li.list-item>div.autoOverflow.showHeader>img.showImg+h3.showTitle+p.nextShow-->
+                <li class="list-item" data-ng-repeat="item in shows">
                     <div class="autoOverflow showHeader">
                         <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
+                        <h3 class="showTitle">{{item.title}}</h3>
+                        <p class="nextShow">{{item.air_day}}&nbsp;{{item.air_time}}</p>
                     </div>
-                </li>
-                <li class="list-item">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                    </div>
-                </li>
-                <li class="list-item">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                    </div>
-                </li>
-                <li class="list-item">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                    </div>
-                </li>
-                <li class="list-item">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                    </div>
-                </li>
-                <li class="list-item">
-                    <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">Homeland</h3>
-                        <p class="nextShow">Season 02 Episode 03</p>
-                    </div>
+                    <p class="overview">{{item.overview}}</p>
                 </li>
             </ul>
             <div class="navs">
