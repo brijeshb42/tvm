@@ -1,3 +1,8 @@
+function getImgId(url){
+    var s = url.substring(url.lastIndexOf('/')+1,url.length);
+    return s;
+}
+
 (function($){
     $(window).load(function(){
     	$('a').on("click",function(){
@@ -13,7 +18,7 @@
 
 function NavController($scope){
     $scope.selectedNav = 0;
-    $scope.navItems = [{href:"#todayList",title:"Recent"},
+    $scope.navItems = [{href:"#todayList",title:"Latest"},
                        {href:"#addShow",title:"Add Shows"},
                        {href:"#showList",title:"All Shows"}];
     $scope.changeView = function(index){
@@ -24,6 +29,8 @@ function NavController($scope){
 }
 
 function SearchShowsController($scope,$http){
+    $scope.epi = true;
+    $scope.img = true;
     $scope.msg = "";
     $scope.class = "message";
     $scope.shows = [];
@@ -45,7 +52,7 @@ function SearchShowsController($scope,$http){
                     $scope.shows = data;
                 }).
                 error(function(data,status,header,config){
-                    $scope.msg = "There was an error.";
+                    $scope.msg = "There was an error. Try again.";
                     $scope.class = "error";
                     $scope.isShown = false;
                     $scope.shows = [];
@@ -58,6 +65,8 @@ function SearchShowsController($scope,$http){
         delete d["tvdb_id"];
         tv.indexedDB.addShow(d);
         console.log(d);
+        if($scope.epi===false)
+            return;
         $http({method: 'GET',url:urls.proxy+urls.api+urls.id+"/series/"+d.showid+"/all/en.xml"}).
             success(function(data,status,header,config){
                 var show = {};
@@ -81,24 +90,17 @@ function SearchShowsController($scope,$http){
                     epi.lastUpdated = $(this).find("lastupdated").text();
                     episodes.push(epi);
                 });
-                //console.log(episodes);
                 tv.indexedDB.addEpisodes(episodes,show);
             }).
             error(function(data,status,header,config){
                 $scope.msg = "There was an error while downloading episode list.";
                 $scope.class = "error";
             });
-        /*var u = urls.proxy+urls.banner+show.poster;
-        var img = new Image();
-        img.addEventListener("load",function(e){
-            //window.removeEventListener("beforeunload",tv.network.progressError,false);
-            var dataUrl = tv.ui.getDataUrl(img);
-            var s = {};
-            s.showid = show.showid;
-            s.poster = dataUrl;
-            tv.indexedDB.savePoster(s);
-        });
-        img.src = u;*/
+        if($scope.img===false)
+            return;
+        var ur = urls.proxy+u.poster+getImgId(d.images.poster);
+        console.log(ur);
+        tv.network.getPoster(d.showid,ur);
     };
 }
 
@@ -107,5 +109,24 @@ function ShowListController($scope){
 }
 
 function UpcomingController($scope){
-    $scope.shows = [{showname:"Loading..."}];
+    $scope.shows = [];
+    $scope.noUpcoming = true;
+    if($scope.shows.length>0)
+        $scope.noUpcoming = false;
+
+    $scope.formatDate = function(date){
+        return tv.ui.formatDate(date);
+    };
+
+    $scope.dayType = function(date){
+        var dt = tv.ui.getDate(0);
+        var day = "";
+        if(date<dt){
+            return "yesterday";
+        }else if(date==dt){
+            return "today";
+        }else if(date>dt){
+            return "yet-to-come";
+        }
+    };
 }

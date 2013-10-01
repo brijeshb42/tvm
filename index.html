@@ -22,15 +22,18 @@
         </div>
         <div id="content">
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
-                <li data-ng-repeat="item in shows" class="list-item {{item.day}}">
+                <li data-ng-repeat="item in shows | orderBy:'data.airdate':false" class="list-item {{dayType(item.data.airdate)}}">
                     <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">{{item.showname}}</h3>
-                        <h4 class="showTitle">{{item.name}}</h4>
-                        <p class="nextShow">Season&nbsp;{{item.season}}&nbsp;Episode&nbsp;{{item.episode}}</p>
-                        <p class="datetime">{{item.airdate}}&nbsp;<span class="day">({{item.day}})</span></p>
-                        <p class="overview">{{item.overview}}</p>
+                        <img src="{{item.img}}" alt="" class="showImg">
+                        <h3 class="showTitle">{{item.data.showname}}</h3>
+                        <h4 class="showTitle">{{item.data.name}}</h4>
+                        <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>
+                        <p class="datetime">{{formatDate(item.data.airdate)}}&nbsp;<span class="day">({{dayType(item.data.airdate)}})</span></p>
+                        <p class="overview">{{item.data.overview}}</p>
                     </div>
+                </li>
+                <li class="list-item" data-ng-show="noUpcoming" style="text-align:center">
+                    <div class="autoOverflow showHeader"><h2>No Upcoming Shows.</h2></div>
                 </li>
             </ul>
             <div id="addShow" class="show-list" data-ng-show="selectedNav==1" data-ng-controller="SearchShowsController">
@@ -40,7 +43,7 @@
                 </form>
                 <ul id="searchList" data-ng-show="isShown">
                     <li class="list-item"><h2>Search Result for {{searchName}}</h2></li>
-                    <li class="list-item" data-ng-repeat="item in shows">
+                    <li class="list-item" data-ng-repeat="item in shows track by $index">
                         <div class="autoOverflow showHeader">
                             <div class="titleBar">
                                 <h3 class="showTitle">{{item.title}}&nbsp;({{item.year}})</h3>
@@ -56,15 +59,26 @@
             </div>
             <ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
             <!--li.list-item>div.autoOverflow.showHeader>img.showImg+h3.showTitle+p.nextShow-->
-                <li class="list-item" data-ng-repeat="item in shows">
+                <li class="list-item" data-ng-repeat="item in shows track by $index">
                     <div class="autoOverflow showHeader">
-                        <img src="img/show.jpg" alt="" class="showImg">
-                        <h3 class="showTitle">{{item.title}}</h3>
-                        <p class="nextShow">{{item.air_day}}&nbsp;{{item.air_time}}&nbsp;on&nbsp;{{item.network}}</p>
-                        
+                        <img src="{{item.img}}" alt="{{item.title}}" class="showImg">
+                        <h3 class="showTitle">{{item.data.title}}</h3>
+                        <p class="nextShow">{{item.data.air_day}}&nbsp;{{item.data.air_time}}&nbsp;on&nbsp;{{item.data.network}}</p>
+                        <p class="overview">{{item.data.overview}}</p>
                     </div>
                 </li>
             </ul>
+            <!--<ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
+                <li class="list-item" data-ng-repeat="(key, value) in shows track by key">
+                    <div class="autoOverflow showHeader">
+                        <img src="{{value.img}}" alt="" class="showImg">
+                        <p>{{key}}</p>
+                        <h3 class="showTitle">{{value.data.title}}</h3>
+                        <p class="nextShow">{{value.data.air_day}}&nbsp;{{value.data.air_time}}&nbsp;on&nbsp;{{value.data.network}}</p>
+                        <p class="overview">{{value.data.overview}}</p>
+                    </div>
+                </li>
+            </ul>-->
             <div class="navs">
                 <ul class="nav-list">
                     <li data-ng-repeat="item in navItems" data-ng-class="{active: $index==selectedNav}">

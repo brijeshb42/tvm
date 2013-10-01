@@ -71,12 +71,15 @@ body{
 	}
 	.today{
 		border-bottom-color: @color-today;
+		//background-color: @color-today-back;
 	}
 	.yesterday{
 		border-bottom-color: @color-yest;
+		//background-color: @color-yest-back;
 	}
 	.yet-to-come{
 		border-bottom-color: @color-yet;
+		//background-color: @color-yet-back;
 	}
 }
 
@@ -86,7 +89,7 @@ body{
 		width: @img-width;
 		height: @img-height;
 		padding: 4px;
-		border: 1px solid @body-back-color;
+		border: 1px solid #ccc;
 		margin-right: 4px;
 	}
 	.titleBar{
@@ -112,6 +115,9 @@ body{
 		.day{
 			text-transform: uppercase;
 		}
+	}
+	p.nextShow{
+		color: #4C64C2;
 	}
 	p.overview{
 		text-align: justify;

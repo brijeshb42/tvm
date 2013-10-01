@@ -18,6 +18,7 @@ u = {
     search: urls.trakt+"search/shows.json/"+urls.trakt_api+"/",
     img: urls.proxy+urls.img_url,
     episode: urls.trakt+"show/season.json/"+urls.trakt_api+"/",
+    poster: "slurm.trakt.us/images/posters/"
 };
 
 var tv = {};
@@ -53,29 +54,36 @@ tv.ui.formatDate =  function(date){
 		return dt;
 };
 
-tv.ui.getDataUrl = function(img) {
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    var dataURL = canvas.toDataURL("image/jpeg");
-    //return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    return dataURL;
+tv.ui.getDataUrl = function(blob,showid) {
+	var im = URL.createObjectURL(blob);
+	var image = new Image();
+	var canvas = document.createElement("canvas");
+	image.onload = function(){
+    	var width = 300;
+    	var height = width*((this.height)/(this.width));
+    	canvas.width = width;
+    	canvas.height = height;
+    	var ctx = canvas.getContext("2d");
+    	ctx.drawImage(this, 0, 0,width,height);
+    	var dataURL = canvas.toDataURL(blob.type);
+    	URL.revokeObjectURL(im);
+    	var show = {};
+    	show.showid = showid;
+    	show.img = dataURL;
+    	tv.indexedDB.savePoster(show);
+	};
+	image.src = im;
 };
 
-tv.network.getPoster = function(show){
-	var u = urls.proxy+urls.banner+show.poster;
-	var img = new Image();
-	img.addEventListener("load",function(e){
-		window.removeEventListener("beforeunload",tv.network.progressError,false);
-		var dataUrl = tv.ui.getDataUrl(img);
-		var s = {};
-		s.showid = show.showid;
-		s.poster = dataUrl;
-		tv.indexedDB.savePoster(s);
-	})
-	img.src = u;
+tv.network.getPoster = function(showid,url){
+	console.log(url);
+    var img = new XMLHttpRequest();
+    img.responseType = 'blob';
+    img.onload = function(){
+    	tv.ui.getDataUrl(this.response,showid);
+    };
+    img.open('GET',url, true);
+    img.send();
 };
 
 tv.indexedDB.db = null;
@@ -109,8 +117,8 @@ tv.indexedDB.open = function(from){
 		if(from==="back"){
 			tv.indexedDB.getTodayCount();
 		}else{
-			tv.indexedDB.getUpcoming();
-			tv.indexedDB.getAllShows();
+			tv.indexedDB.getJoinUpcoming();
+			tv.indexedDB.getJoinAll();
 		}
 	};
 
@@ -122,19 +130,27 @@ tv.indexedDB.addShow = function(show){
 	var trans = db.transaction([DB_show],"readwrite");
 	var store = trans.objectStore(DB_show);
 	var request = store.add(show);
+	var scope = angular.element($("#addShow")).scope();
 
 	request.onsuccess = function(e){
         console.log("Show Added.");
         console.log(e);
+        scope.$apply(function(){
+        	scope.epi = true;
+        });
+        //tv.network.getEpisodes(show.showid);
     };
     request.onerror = function(e){
-    	console.log("error add show: "+d.title);
+    	console.log("error add show: "+show.title+" or this show is already present.");
+    	scope.$apply(function(){
+        	scope.epi = false;
+        });
     }
 }
 
 tv.indexedDB.getAllShows = function(){
 	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_show],"readwrite");
+	var trans = db.transaction([DB_show],"readonly");
 	var store = trans.objectStore(DB_show);
 	var req = store.count();
 	//console.log(req);
@@ -151,7 +167,7 @@ tv.indexedDB.getAllShows = function(){
 				//console.log(result);
 				if(!!result == false)
 					return;
-				console.log(result.value);
+				//console.log(result.value);
 				scope.$apply(function(){
 					scope.shows.push(result.value);
 				});
@@ -179,6 +195,7 @@ tv.indexedDB.addEpisodes = function(episodes,show){
 	var trans = db.transaction([DB_epi],"readwrite");
 	var store = trans.objectStore(DB_epi);
 	var total = 0;
+	var scope = angular.element($("#addShow")).scope();
 	//var request = store.add(episodes);
 	for (var i=0;i<episodes.length;i++) {
     	var request = store.add(episodes[i]);
@@ -186,17 +203,23 @@ tv.indexedDB.addEpisodes = function(episodes,show){
 			total++;
 			if(total==episodes.length){
 				console.log("Episodes added.");
+				scope.$apply(function(){
+					scope.img = true;
+				});
 			}
 		};
 		request.onerror = function(e){
 			console.log("Error adding episode.");
+			scope.$apply(function(){
+				scope.img = false;
+			});
 		};
   	}
 };
 
 tv.indexedDB.getEpisodes = function(showid){
 	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_epi],"readwrite");
+	var trans = db.transaction([DB_epi],"readonly");
 	var store = trans.objectStore(DB_epi);
 	var keyRange = IDBKeyRange.lowerBound(0);
 	var cursorRequest = store.openCursor(keyRange);
@@ -291,7 +314,7 @@ tv.indexedDB.savePoster = function(show){
 
 tv.indexedDB.getPoster = function(id){
 	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_img],"readwrite");
+	var trans = db.transaction([DB_img],"readonly");
 	var store = trans.objectStore(DB_img);
 	var req = store.get(id);
 	req.onsuccess = function(e){
@@ -345,7 +368,7 @@ tv.indexedDB.getTodayCount = function(){
 			notification = webkitNotifications.createNotification(
   				'tv128.png',  // icon url - can be relative
   				'TV!',  // notification title
-  				count+' shows today.'  // notification body text
+  				count+' '+(count>1?'shows':'show')+' today.'  // notification body text
 			);
 		}
 		notification.show();
@@ -354,11 +377,11 @@ tv.indexedDB.getTodayCount = function(){
 
 tv.indexedDB.getUpcoming = function(){
 	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_epi],"readwrite");
+	var trans = db.transaction([DB_epi],"readonly");
 	var store = trans.objectStore(DB_epi);
 	var y = tv.ui.getDate(-1);
 	var n = tv.ui.getDate(6);
-	console.log(y+' '+n);
+	//console.log(y+' '+n);
 	var index = store.index("airdate");
 	var range = IDBKeyRange.bound(y, n,false,false);
 	var req = index.openCursor(range);
@@ -382,8 +405,8 @@ tv.indexedDB.getUpcoming = function(){
 			up.airdate = tv.ui.formatDate(up.airdate);
 			scope.$apply(function(){
 				scope.shows.push(up);
+				scope.noUpcoming = false;
 			});
-			console.log(cursor.value);
 			cursor.continue();
 		}
 	};
@@ -391,3 +414,112 @@ tv.indexedDB.getUpcoming = function(){
 		console.log("Error opening DB.");
 	};
 };
+
+tv.indexedDB.getJoinAll = function(){
+	var showS = {};
+	var sho = [];
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_show,DB_img],"readonly");
+	var scope = angular.element($("#showList")).scope();
+	scope.shows = [];
+	transaction.oncomplete = function(){
+		console.log("Trans comp.");
+		for(var key in showS){
+			if(showS.hasOwnProperty(key)){
+				sho.push(showS[key]);
+			}
+		}
+		scope.$apply(function(){
+			scope.shows = sho;
+		});
+	};
+	var showCursor,imgCursor;
+	var loaded = false;
+
+	var showStore = transaction.objectStore(DB_show);
+	showStore.openCursor().onsuccess = function(event){
+		showCursor = event.target.result;
+		if(!showCursor)
+			return;
+		if(!showS[showCursor.value.showid]){
+			showS[showCursor.value.showid] = {};
+			showS[showCursor.value.showid].data = showCursor.value;
+		}else{
+			showS[showCursor.value.showid].data = showCursor.value;
+		}
+		showCursor.continue();
+	};
+	var imgStore = transaction.objectStore(DB_img);
+	imgStore.openCursor().onsuccess = function(event){
+		imgCursor = event.target.result;
+		if(!imgCursor)
+			return;
+		if(!showS[imgCursor.value.showid]){
+			showS[imgCursor.value.showid] = {};
+			showS[imgCursor.value.showid].img = imgCursor.value.img;
+		}else{
+			showS[imgCursor.value.showid].img = imgCursor.value.img;
+		}
+		imgCursor.continue();
+	};
+}
+
+tv.indexedDB.getJoinUpcoming = function(){
+	var showS = {};
+	var imgS = {};
+	var sho = [];
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_epi,DB_img],"readonly");
+	var scope = angular.element($("#todayList")).scope();
+	scope.shows = [];
+	scope.noUpcoming = true;
+	transaction.oncomplete = function(){
+		console.log("Trans comp epi.");
+		for(var key in showS){
+			showS[key].img = imgS[showS[key].data.showid].img;
+			if(showS.hasOwnProperty(key)){
+				sho.push(showS[key]);
+			}
+		}
+		scope.$apply(function(){
+			scope.shows = sho;
+			scope.noUpcoming = false;
+		});
+		console.log(sho);
+		//console.log(imgS);
+	};
+	var showCursor,imgCursor;
+	var loaded = false;
+
+	var showStore = transaction.objectStore(DB_epi);
+	var y = tv.ui.getDate(-1);
+	var n = tv.ui.getDate(5);
+	var index = showStore.index("airdate");
+	var range = IDBKeyRange.bound(y, n,false,false);
+
+	index.openCursor(range).onsuccess = function(event){
+		showCursor = event.target.result;
+		if(!showCursor)
+			return;
+		if(!showS[showCursor.value.episodeID]){
+			showS[showCursor.value.episodeID] = {};
+			showS[showCursor.value.episodeID].data = showCursor.value;
+		}else{
+			showS[showCursor.value.episodeID].data = showCursor.value;
+		}
+		showCursor.continue();
+	};
+	var imgStore = transaction.objectStore(DB_img);
+	imgStore.openCursor().onsuccess = function(event){
+		imgCursor = event.target.result;
+		if(!imgCursor)
+			return;
+		if(!imgS[imgCursor.value.showid]){
+			imgS[imgCursor.value.showid] = {};
+			imgS[imgCursor.value.showid].img = imgCursor.value.img;
+		}else{
+			imgS[imgCursor.value.showid].img = imgCursor.value.img;
+		}
+		imgCursor.continue();
+	};
+}

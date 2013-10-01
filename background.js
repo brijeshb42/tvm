@@ -6,11 +6,5 @@ chrome.app.runtime.onLaunched.addListener(function(){
 		},
 		resizable: false
 	});
-	/*var notification = webkitNotifications.createNotification(
-  		'tv128.png',  // icon url - can be relative
-  		'Hello!',  // notification title
-  		'Lorem ipsum...'  // notification body text
-	);
-	notification.show();*/
 	tv.indexedDB.open("back");
 });
