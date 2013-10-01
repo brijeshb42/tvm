@@ -75,6 +75,7 @@ body{padding:20px 10px;padding-top:50px;padding-right:2px;margin:0;font-family:'
 #addShow{text-align:center}
 button,button[type="submit"]{border:none;background:#d52346;color:#fff;font-size:1.2em;font-family:"Prosto One";padding:10px 20px;-webkit-border-radius:5px;-moz-border-radius:5px;-ms-border-radius:5px;-o-border-radius:5px;border-radius:5px;-webkit-transition:all .3s ease;-moz-transition:all .3s ease;-ms-transition:all .3s ease;-o-transition:all .3s ease;transition:all .3s ease}
 button:hover{background-color:#14a225}
+.btn-mini{padding:2px;-webkit-border-radius:0;-moz-border-radius:0;-ms-border-radius:0;-o-border-radius:0;border-radius:0;font-size:.5em}
 #searchBox{border:1px solid #ccc;text-align:center;padding:10px}#searchBox input[type="text"]{min-height:30px;font-size:1.5em;border:4px solid #4a9fee;padding:4px;border-radius:2px;font-family:"Prosto One";color:#00386d}
 #searchBox input[type="text"]:focus{border-color:#f86300;outline:0}
 #searchBox p{font-size:1em;padding:0;margin:0;margin-top:5px}

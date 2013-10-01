@@ -117,8 +117,9 @@ tv.indexedDB.open = function(from){
 		if(from==="back"){
 			tv.indexedDB.getTodayCount();
 		}else{
-			tv.indexedDB.getJoinUpcoming();
-			tv.indexedDB.getJoinAll();
+			/*tv.indexedDB.getJoinUpcoming();
+			tv.indexedDB.getJoinAll();*/
+			tv.indexedDB.getAll();
 		}
 	};
 
@@ -415,26 +416,51 @@ tv.indexedDB.getUpcoming = function(){
 	};
 };
 
-tv.indexedDB.getJoinAll = function(){
+
+tv.indexedDB.getAll = function(){
 	var showS = {};
-	var sho = [];
+	var epiS = {};
+	var imgS = {};
+	var sho = [],epi = [];
 	var db = tv.indexedDB.db;
-	var transaction = db.transaction([DB_show,DB_img],"readonly");
-	var scope = angular.element($("#showList")).scope();
-	scope.shows = [];
+	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readonly");
+	var scopeUpcoming = angular.element($("#todayList")).scope();
+	var scopeAll = angular.element($("#showList")).scope();
+	scopeUpcoming.shows = scopeAll.shows = [];
+	scopeUpcoming.noUpcoming = true;
+
 	transaction.oncomplete = function(){
-		console.log("Trans comp.");
+		console.log("All transaction complete.");
 		for(var key in showS){
+			showS[key].img = imgS[showS[key].data.showid].img;
 			if(showS.hasOwnProperty(key)){
 				sho.push(showS[key]);
 			}
 		}
-		scope.$apply(function(){
-			scope.shows = sho;
+		for(var key in epiS){
+			epiS[key].img = imgS[epiS[key].data.showid].img;
+			if(epiS.hasOwnProperty(key)){
+				epi.push(epiS[key]);
+			}
+		}
+		/*console.log(sho);
+		console.log(epi);
+		console.log(showS);
+		console.log(imgS);
+		console.log(epiS);*/
+		scopeUpcoming.$apply(function(){
+			scopeUpcoming.shows = epi;
+			if(scopeUpcoming.shows.length>0)
+				scopeUpcoming.noUpcoming = false;
+			else
+				scopeUpcoming.noUpcoming = true;
+		});
+		scopeAll.$apply(function(){
+			scopeAll.shows = sho;
 		});
 	};
-	var showCursor,imgCursor;
-	var loaded = false;
+
+	var showCursor,epiCursor,imgCursor;
 
 	var showStore = transaction.objectStore(DB_show);
 	showStore.openCursor().onsuccess = function(event){
@@ -443,72 +469,28 @@ tv.indexedDB.getJoinAll = function(){
 			return;
 		if(!showS[showCursor.value.showid]){
 			showS[showCursor.value.showid] = {};
-			showS[showCursor.value.showid].data = showCursor.value;
-		}else{
-			showS[showCursor.value.showid].data = showCursor.value;
 		}
+		showS[showCursor.value.showid].data = showCursor.value;
 		showCursor.continue();
 	};
-	var imgStore = transaction.objectStore(DB_img);
-	imgStore.openCursor().onsuccess = function(event){
-		imgCursor = event.target.result;
-		if(!imgCursor)
-			return;
-		if(!showS[imgCursor.value.showid]){
-			showS[imgCursor.value.showid] = {};
-			showS[imgCursor.value.showid].img = imgCursor.value.img;
-		}else{
-			showS[imgCursor.value.showid].img = imgCursor.value.img;
-		}
-		imgCursor.continue();
-	};
-}
 
-tv.indexedDB.getJoinUpcoming = function(){
-	var showS = {};
-	var imgS = {};
-	var sho = [];
-	var db = tv.indexedDB.db;
-	var transaction = db.transaction([DB_epi,DB_img],"readonly");
-	var scope = angular.element($("#todayList")).scope();
-	scope.shows = [];
-	scope.noUpcoming = true;
-	transaction.oncomplete = function(){
-		console.log("Trans comp epi.");
-		for(var key in showS){
-			showS[key].img = imgS[showS[key].data.showid].img;
-			if(showS.hasOwnProperty(key)){
-				sho.push(showS[key]);
-			}
-		}
-		scope.$apply(function(){
-			scope.shows = sho;
-			scope.noUpcoming = false;
-		});
-		console.log(sho);
-		//console.log(imgS);
-	};
-	var showCursor,imgCursor;
-	var loaded = false;
-
-	var showStore = transaction.objectStore(DB_epi);
+	var epiStore = transaction.objectStore(DB_epi);
 	var y = tv.ui.getDate(-1);
 	var n = tv.ui.getDate(5);
-	var index = showStore.index("airdate");
-	var range = IDBKeyRange.bound(y, n,false,false);
+	var epiIndex = epiStore.index("airdate");
+	var range = IDBKeyRange.bound(y,n,false,false);
 
-	index.openCursor(range).onsuccess = function(event){
-		showCursor = event.target.result;
-		if(!showCursor)
+	epiIndex.openCursor(range).onsuccess = function(event){
+		epiCursor = event.target.result;
+		if(!epiCursor)
 			return;
-		if(!showS[showCursor.value.episodeID]){
-			showS[showCursor.value.episodeID] = {};
-			showS[showCursor.value.episodeID].data = showCursor.value;
-		}else{
-			showS[showCursor.value.episodeID].data = showCursor.value;
+		if(!epiS[epiCursor.value.episodeID]){
+			epiS[epiCursor.value.episodeID] = {};
 		}
-		showCursor.continue();
+		epiS[epiCursor.value.episodeID].data = epiCursor.value;
+		epiCursor.continue();
 	};
+
 	var imgStore = transaction.objectStore(DB_img);
 	imgStore.openCursor().onsuccess = function(event){
 		imgCursor = event.target.result;
@@ -516,10 +498,8 @@ tv.indexedDB.getJoinUpcoming = function(){
 			return;
 		if(!imgS[imgCursor.value.showid]){
 			imgS[imgCursor.value.showid] = {};
-			imgS[imgCursor.value.showid].img = imgCursor.value.img;
-		}else{
-			imgS[imgCursor.value.showid].img = imgCursor.value.img;
 		}
+		imgS[imgCursor.value.showid].img = imgCursor.value.img;
 		imgCursor.continue();
 	};
 }

@@ -64,7 +64,7 @@ function SearchShowsController($scope,$http){
         d.showid = d.tvdb_id;
         delete d["tvdb_id"];
         tv.indexedDB.addShow(d);
-        console.log(d);
+        //console.log(d);
         if($scope.epi===false)
             return;
         $http({method: 'GET',url:urls.proxy+urls.api+urls.id+"/series/"+d.showid+"/all/en.xml"}).
@@ -99,7 +99,7 @@ function SearchShowsController($scope,$http){
         if($scope.img===false)
             return;
         var ur = urls.proxy+u.poster+getImgId(d.images.poster);
-        console.log(ur);
+        //console.log(ur);
         tv.network.getPoster(d.showid,ur);
     };
 }

@@ -61,24 +61,17 @@
             <!--li.list-item>div.autoOverflow.showHeader>img.showImg+h3.showTitle+p.nextShow-->
                 <li class="list-item" data-ng-repeat="item in shows track by $index">
                     <div class="autoOverflow showHeader">
+                        <div class="controlBar">
+                            <button class="btn-mini">DELETE</button>
+                            <button class="btn-mini">Full Info</button>
+                        </div>
                         <img src="{{item.img}}" alt="{{item.title}}" class="showImg">
                         <h3 class="showTitle">{{item.data.title}}</h3>
                         <p class="nextShow">{{item.data.air_day}}&nbsp;{{item.data.air_time}}&nbsp;on&nbsp;{{item.data.network}}</p>
-                        <p class="overview">{{item.data.overview}}</p>
+                        <!--<p class="overview">{{item.data.overview}}</p>-->
                     </div>
                 </li>
             </ul>
-            <!--<ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
-                <li class="list-item" data-ng-repeat="(key, value) in shows track by key">
-                    <div class="autoOverflow showHeader">
-                        <img src="{{value.img}}" alt="" class="showImg">
-                        <p>{{key}}</p>
-                        <h3 class="showTitle">{{value.data.title}}</h3>
-                        <p class="nextShow">{{value.data.air_day}}&nbsp;{{value.data.air_time}}&nbsp;on&nbsp;{{value.data.network}}</p>
-                        <p class="overview">{{value.data.overview}}</p>
-                    </div>
-                </li>
-            </ul>-->
             <div class="navs">
                 <ul class="nav-list">
                     <li data-ng-repeat="item in navItems" data-ng-class="{active: $index==selectedNav}">
