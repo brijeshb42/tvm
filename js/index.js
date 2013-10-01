@@ -104,15 +104,13 @@ function SearchShowsController($scope,$http){
     };
 }
 
-function ShowListController($scope){
-    $scope.shows = [];
-}
-
 function UpcomingController($scope){
     $scope.shows = [];
     $scope.noUpcoming = true;
     if($scope.shows.length>0)
         $scope.noUpcoming = false;
+    else
+        $scope.noUpcoming = true;
 
     $scope.formatDate = function(date){
         return tv.ui.formatDate(date);
@@ -128,5 +126,30 @@ function UpcomingController($scope){
         }else if(date>dt){
             return "yet-to-come";
         }
+    };
+}
+
+function ShowListController($scope){
+    $scope.shows = [];
+    $scope.noAdded = true;
+    $scope.deletedIndex = null;
+
+    if($scope.shows.length>0)
+        $scope.noAdded = false;
+    else
+        $scope.noAdded = true;
+
+    $scope.status = function(st){
+        return (st)?"Ended":"Continuing";
+    };
+
+    $scope.deleteShow = function(index){
+        //console.log("Alert");
+        //console.log($scope.shows[index]);
+        tv.indexedDB.deleteShowComplete($scope.shows[index].data.showid);
+    };
+
+    $scope.showInfo = function(index){
+        console.log("Info");
     };
 }

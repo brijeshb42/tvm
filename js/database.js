@@ -424,6 +424,7 @@ tv.indexedDB.getAll = function(){
 	var sho = [],epi = [];
 	var db = tv.indexedDB.db;
 	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readonly");
+	
 	var scopeUpcoming = angular.element($("#todayList")).scope();
 	var scopeAll = angular.element($("#showList")).scope();
 	scopeUpcoming.shows = scopeAll.shows = [];
@@ -443,11 +444,6 @@ tv.indexedDB.getAll = function(){
 				epi.push(epiS[key]);
 			}
 		}
-		/*console.log(sho);
-		console.log(epi);
-		console.log(showS);
-		console.log(imgS);
-		console.log(epiS);*/
 		scopeUpcoming.$apply(function(){
 			scopeUpcoming.shows = epi;
 			if(scopeUpcoming.shows.length>0)
@@ -457,6 +453,10 @@ tv.indexedDB.getAll = function(){
 		});
 		scopeAll.$apply(function(){
 			scopeAll.shows = sho;
+			if(scopeAll.shows.length>0)
+				scopeAll.noAdded = false;
+			else
+				scopeAll.noAdded = true;
 		});
 	};
 
@@ -503,3 +503,52 @@ tv.indexedDB.getAll = function(){
 		imgCursor.continue();
 	};
 }
+
+tv.indexedDB.deleteShowComplete = function(id) {
+  	var db = tv.indexedDB.db;
+  	var trans = db.transaction([DB_show,DB_epi,DB_img], "readwrite");
+
+  	trans.oncomplete = function(){
+  		tv.indexedDB.getAll();
+  	};
+  	trans.onerror = function(){
+  		console.log("error during deleteion");
+  	};
+  
+  	var showStore = trans.objectStore(DB_show);
+
+  	var showDelRequest = showStore.delete(id);
+  	showDelRequest.onsuccess = function(e) {
+  		console.log("show details deleted");
+  	};
+
+  	showDelRequest.onerror = function(e) {
+    	console.log("Error deleting show details.");
+  	};
+
+  	var imgStore = trans.objectStore(DB_img);
+  	var imgDelRequest = imgStore.delete(id);
+
+  	imgDelRequest.onsuccess = function(e) {
+    	console.log("show img deleted");
+  	};
+
+  	imgDelRequest.onerror = function(e) {
+    	console.log("show img not deleted");
+  	};
+
+	var epiStore = trans.objectStore(DB_epi);
+	var index = epiStore.index("showid");
+	var range = new IDBKeyRange.only(id.toString());
+	var req = index.openCursor(range);
+	req.onsuccess = function(e){
+		var cursor = e.target.result;
+		if(cursor){
+			cursor.delete();
+			cursor.continue();
+		}
+	};
+	req.onerror = function(){
+		console.log("Error opening DB.");
+	};
+};

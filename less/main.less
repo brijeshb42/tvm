@@ -92,11 +92,16 @@ body{
 		border: 1px solid #ccc;
 		margin-right: 4px;
 	}
+	.showImgSmall{
+		width: @img-width-small;
+		height: (@img-height*@img-width-small/@img-width);
+	}
 	.titleBar{
 		float: left;
 	}
 	.controlBar{
 		float: right;
+		margin-left: 4px;
 	}
 	.showTitle{
 		margin: 0;
@@ -199,9 +204,32 @@ button:hover{
 }
 
 .btn-mini{
-	padding: 2px;
-	.rounded-corner(0px);
+	padding: 4px;
+	margin-top: 4px;
 	font-size: .5em;
+	background-color: #fff;
+	.rounded-corner(0px);
+}
+
+.btn-mini:hover{
+	background-color: transparent;
+}
+
+.icon{
+	width: @icon-dimen;
+	height: @icon-dimen;
+	line-height: @icon-dimen;
+	vertical-align: text-top;
+	background-image: url(@icon-path);
+	background-color: transparent;
+}
+
+.icon-delete{
+	background-position: -456px 0;
+}
+
+.icon-info{
+	background-position: -120px -96px;
 }
 
 #searchBox{

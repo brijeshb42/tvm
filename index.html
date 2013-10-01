@@ -24,7 +24,7 @@
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
                 <li data-ng-repeat="item in shows | orderBy:'data.airdate':false" class="list-item {{dayType(item.data.airdate)}}">
                     <div class="autoOverflow showHeader">
-                        <img src="{{item.img}}" alt="" class="showImg">
+                        <img src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
                         <h3 class="showTitle">{{item.data.showname}}</h3>
                         <h4 class="showTitle">{{item.data.name}}</h4>
                         <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>
@@ -62,14 +62,18 @@
                 <li class="list-item" data-ng-repeat="item in shows track by $index">
                     <div class="autoOverflow showHeader">
                         <div class="controlBar">
-                            <button class="btn-mini">DELETE</button>
-                            <button class="btn-mini">Full Info</button>
+                            <button data-ng-click="deleteShow($index)" title="Delete Show" class="btn-mini icon icon-delete"></button>
+                            <button data-ng-click="showInfo($index)" title="View Full Info" class="btn-mini icon icon-info"></button>
                         </div>
-                        <img src="{{item.img}}" alt="{{item.title}}" class="showImg">
+                        <img src="{{item.img}}" alt="{{item.title}}" class="showImg showImgSmall">
                         <h3 class="showTitle">{{item.data.title}}</h3>
                         <p class="nextShow">{{item.data.air_day}}&nbsp;{{item.data.air_time}}&nbsp;on&nbsp;{{item.data.network}}</p>
+                        <p class="overview">{{status(item.data.ended)}}</p>
                         <!--<p class="overview">{{item.data.overview}}</p>-->
                     </div>
+                </li>
+                <li class="list-item" data-ng-show="noAdded" style="text-align:center">
+                    <div class="autoOverflow showHeader"><h2>No Shows added yet.</h2></div>
                 </li>
             </ul>
             <div class="navs">
