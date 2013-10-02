@@ -106,6 +106,7 @@ function SearchShowsController($scope,$http){
 
 function UpcomingController($scope){
     $scope.shows = [];
+    $scope.info = "Loading shows...";
     $scope.noUpcoming = true;
     if($scope.shows.length>0)
         $scope.noUpcoming = false;
@@ -131,6 +132,7 @@ function UpcomingController($scope){
 
 function ShowListController($scope){
     $scope.shows = [];
+    $scope.info = "Loading shows...";
     $scope.noAdded = true;
     $scope.deletedIndex = null;
 
@@ -144,12 +146,27 @@ function ShowListController($scope){
     };
 
     $scope.deleteShow = function(index){
-        //console.log("Alert");
-        //console.log($scope.shows[index]);
-        tv.indexedDB.deleteShowComplete($scope.shows[index].data.showid);
+        $.confirm(
+            {   message: "Do you want to delete "+$scope.shows[index].data.title+" ?",
+                okText: "Yes",
+                cancelText: "No",
+                onconfirm:function(){
+                    tv.indexedDB.deleteShowComplete($scope.shows[index].data.showid);
+                }
+            }
+        );
     };
 
     $scope.showInfo = function(index){
         console.log("Info");
+        chrome.app.window.create('../info.html',{
+            bounds: {
+                width: 450,
+                height: 600
+            },
+            resizable: false
+        },function(e){
+            e.contentWindow.SHOW = $scope.shows[index];
+        });
     };
 }

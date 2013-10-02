@@ -83,6 +83,10 @@ body{
 	}
 }
 
+.infoClass{
+	margin-right: @margin-right;
+}
+
 .showHeader{
 	.showImg{
 		float: left;
@@ -91,6 +95,15 @@ body{
 		padding: 4px;
 		border: 1px solid #ccc;
 		margin-right: 4px;
+	}
+	.bigImage{
+		float: left;
+		padding: 5px;
+		border: 1px solid #ccc;
+		margin-right: 5px;
+		margin-left: 20px;
+		width: @img-width-big;
+		height: (@img-height*@img-width-big/@img-width);
 	}
 	.showImgSmall{
 		width: @img-width-small;
@@ -102,6 +115,12 @@ body{
 	.controlBar{
 		float: right;
 		margin-left: 4px;
+		button{
+			margin-right: 5px;
+		}
+		button:last-child{
+			margin-right: 0;
+		}
 	}
 	.showTitle{
 		margin: 0;
@@ -126,6 +145,10 @@ body{
 	}
 	p.overview{
 		text-align: justify;
+	}
+	.showDetails{
+		float: right;
+		margin-right: 25px;
 	}
 }
 
@@ -181,9 +204,56 @@ body{
 	}
 }
 
-/*#addShow,#showList{
-	display: none;
-}*/
+.genres{
+	margin-top: 4px;
+	padding: 0;
+	list-style: none;
+	li{
+		padding: 5px;
+		.rounded-corner(2px);
+		border: 1px solid #ccc;
+		text-decoration: none;
+		color: @color-today;
+	}
+	li.heading{
+		font-weight: bold;
+		color: #000;
+	}
+	span:first-child{
+		//border-bottom: none;
+	}
+	span:last-child{
+		//border-top: none;
+	}
+}
+
+.rating{
+	width: 90%;
+	height: 20px;
+	margin-top: 4px;
+	border: 1px solid @color-today;
+	//.rounded-corner(2px);
+	background: @color-yet;
+	.percent{
+		background-color: @color-yest;
+		height: 100%;
+	}
+}
+
+.episodeContent{
+	margin-left: 20px;
+	#episodeForm{
+		margin-top: 10px;
+		margin-bottom: 10px;
+		h2{
+			float: left;
+			padding: 0;
+			margin: 0;
+		}
+	}
+}
+
+
 #addShow{
 	text-align: center;
 }

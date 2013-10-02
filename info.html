@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>TV Show Manager</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/index.css">
+        <script src="js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="js/vendor/jquery.mousewheel.min.js"></script>
+        <script src="js/vendor/jquery.slimscroll.min.js"></script>
+        <script src="js/vendor/angular.min.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/info.js"></script>
+    </head>
+    <body data-ng-app data-ng-csp>
+        <!--<h1 id="appTitle">TV Show Manager</h1>-->
+        
+        <div id="content" class="infoClass" data-ng-controller="ShowController">
+        <div id="appTitle">
+            <h2>{{show.data.title}}</h2>
+        </div>
+            <div class="autoOverflow showHeader">
+                <img src="{{show.img}}" alt="{{show.data.title}}" class="bigImage">
+                <div class="showDetails">
+                    <p class="nextShow">{{show.data.air_day}}&nbsp;{{show.data.air_time}}</p>
+                    <p class="status">Status: {{getStatus(show.data.ended)}}</p>
+                    <p class="network">Network: {{show.data.network}}</p>
+                    <ul class="genres">
+                        <li class="heading">Genres</li>
+                        <li data-ng-repeat="item in show.data.genres">{{item}}</li>
+                    </ul>
+                    <p class="nextShow">Rating: {{show.data.ratings.percentage}}%</p>
+                    <div class="rating" title="Rating: {{show.data.ratings.percentage}}%">
+                        <div class="percent" style="width:{{show.data.ratings.percentage}}%"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="overview" style="border-bottom:1px solid #ccc;padding-bottom:5px">{{show.data.overview}}</p>
+            <div class="episodeContent" data-ng-controller="EpisodeController">
+                <form id="episodeForm">
+                    <h2>Episode Details:&nbsp;</h2>
+                    <label for="seasonNum">Season</label>
+                    <select name="season" id="seasonNum">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label for="episodeNum">Episode</label>
+                    <select name="episode" id="episodeNum">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+@import "variables";
+@import "mixins";
+
+.confirmDialog{
+	display: none;
+	.overlay{
+		position: fixed;
+		background: #000;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 350;
+		opacity: 0.8;
+	}
+	.content{
+		z-index: 400;
+		position: fixed;
+		width: 50%;
+		left: 25%;
+		top: 20%;
+		border: 1px solid #ccc;
+		padding: 5px;
+		background-color: #eee;
+		border-bottom-width: @border-show-item;
+		.rounded-corner(2px);
+		.message{
+		}
+	}
+	.footer{
+		margin-top: 5px;
+		border-top: 1px solid #ccc;
+		overflow: auto;
+		padding-top: 5px;
+		.controls{
+			float: right;
+			button{
+				padding: 7px;
+				font-size: 0.9em;
+				.rounded-corner(2px);
+				background-color: @color-focus;
+				margin-right: 4px;
+				border: none;
+				border-bottom: 3px solid #ccc;
+				cursor: pointer;
+				color: #fff;
+				.transition;
+			}
+			.ok{
+				background-color: @color-today;
+				border-bottom-color: #0E6E9B;
+			}
+			.ok:active,.ok:hover{
+				background-color: #0E6E9B;
+				border-bottom-color: @color-today;
+			}
+			.error{
+				background-color: @color-yest;
+				border-bottom-color: #A2141F;
+			}
+			.error:active,.error:hover{
+				background-color: #A2141F;
+				border-bottom-color: @color-yest;
+			}
+			button:last-child{
+				margin-right: 0;
+			}
+		}
+	}
+}

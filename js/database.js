@@ -116,7 +116,10 @@ tv.indexedDB.open = function(from){
 		console.log("DB Opened.");
 		if(from==="back"){
 			tv.indexedDB.getTodayCount();
-		}else{
+		}else if(from==="info"){
+
+		}
+		else{
 			/*tv.indexedDB.getJoinUpcoming();
 			tv.indexedDB.getJoinAll();*/
 			tv.indexedDB.getAll();
@@ -376,47 +379,6 @@ tv.indexedDB.getTodayCount = function(){
 	};
 };
 
-tv.indexedDB.getUpcoming = function(){
-	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_epi],"readonly");
-	var store = trans.objectStore(DB_epi);
-	var y = tv.ui.getDate(-1);
-	var n = tv.ui.getDate(6);
-	//console.log(y+' '+n);
-	var index = store.index("airdate");
-	var range = IDBKeyRange.bound(y, n,false,false);
-	var req = index.openCursor(range);
-	var scope = angular.element($("#todayList")).scope();
-	scope.$apply(function(){
-		scope.shows = [];
-	});
-	req.onsuccess = function(e){
-		var cursor = e.target.result;
-		//console.log(cursor);
-		if(cursor){
-			var up = cursor.value;
-			var dt = tv.ui.getDate(0);
-			if(up.airdate<dt){
-				up.day = "yesterday"
-			}else if(up.airdate==dt){
-				up.day = "today";
-			}else if(up.airdate>dt){
-				up.day = "yet-to-come";
-			}
-			up.airdate = tv.ui.formatDate(up.airdate);
-			scope.$apply(function(){
-				scope.shows.push(up);
-				scope.noUpcoming = false;
-			});
-			cursor.continue();
-		}
-	};
-	req.onerror = function(){
-		console.log("Error opening DB.");
-	};
-};
-
-
 tv.indexedDB.getAll = function(){
 	var showS = {};
 	var epiS = {};
@@ -446,17 +408,22 @@ tv.indexedDB.getAll = function(){
 		}
 		scopeUpcoming.$apply(function(){
 			scopeUpcoming.shows = epi;
-			if(scopeUpcoming.shows.length>0)
+			if(scopeUpcoming.shows.length>0){
 				scopeUpcoming.noUpcoming = false;
-			else
+			}
+			else{
 				scopeUpcoming.noUpcoming = true;
+				scopeUpcoming.info = "No upcoming shows.";
+			}
 		});
 		scopeAll.$apply(function(){
 			scopeAll.shows = sho;
 			if(scopeAll.shows.length>0)
 				scopeAll.noAdded = false;
-			else
+			else{
 				scopeAll.noAdded = true;
+				scopeAll.info = "No shows added.";
+			}
 		});
 	};
 

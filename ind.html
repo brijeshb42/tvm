@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>TV Show Manager</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/dialog.css">
+        <script src="js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="js/jquery.confirm.js"></script>
+    </head>
+    <body data-ng-app data-ng-csp data-ng-controller="NavController">
+    </body>
+    <script>
+        $.confirm({message:"Are you sure??",onconfirm:function(){
+            console.log("confirm");
+        },oncancel:function(){
+            console.log("cancell");
+        }});
+    </script>
+</html>

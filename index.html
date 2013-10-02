@@ -8,11 +8,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/dialog.css">
         <script src="js/vendor/jquery-1.10.2.min.js"></script>
         <script src="js/vendor/jquery.mousewheel.min.js"></script>
         <script src="js/vendor/jquery.slimscroll.min.js"></script>
+        <script src="js/jquery.confirm.js"></script>
         <script src="js/vendor/angular.min.js"></script>
-        <script src="js/database.js"></script>
+        <script src="js/database.min.js"></script>
         <script src="js/index.js"></script>
     </head>
     <body data-ng-app data-ng-csp data-ng-controller="NavController">
@@ -33,7 +35,7 @@
                     </div>
                 </li>
                 <li class="list-item" data-ng-show="noUpcoming" style="text-align:center">
-                    <div class="autoOverflow showHeader"><h2>No Upcoming Shows.</h2></div>
+                    <div class="autoOverflow showHeader"><h2>{{info}}</h2></div>
                 </li>
             </ul>
             <div id="addShow" class="show-list" data-ng-show="selectedNav==1" data-ng-controller="SearchShowsController">
@@ -73,7 +75,7 @@
                     </div>
                 </li>
                 <li class="list-item" data-ng-show="noAdded" style="text-align:center">
-                    <div class="autoOverflow showHeader"><h2>No Shows added yet.</h2></div>
+                    <div class="autoOverflow showHeader"><h2>{{info}}</h2></div>
                 </li>
             </ul>
             <div class="navs">
