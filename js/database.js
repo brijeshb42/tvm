@@ -76,10 +76,11 @@ tv.ui.getDataUrl = function(blob,showid) {
 };
 
 tv.network.getPoster = function(showid,url){
-	console.log(url);
+	$.console({message:"Downloading show poster."});
     var img = new XMLHttpRequest();
     img.responseType = 'blob';
     img.onload = function(){
+    	$.console({message:"Poster downloaded."});
     	tv.ui.getDataUrl(this.response,showid);
     };
     img.open('GET',url, true);
@@ -94,9 +95,9 @@ tv.indexedDB.open = function(from){
 	request.onupgradeneeded = function(e){
 		var db = e.target.result;
 		e.target.transaction.onerror = tv.indexedDB.onerror;
-		if(db.objectStoreNames.contains(DB)){
+		/*if(db.objectStoreNames.contains(DB)){
 			db.deleteObjectStore(DB);
-		}
+		}*/
 		var store = db.createObjectStore(DB_show,{keyPath:"showid"});
 		store.createIndex("title","title",{unique:false});
 		store.createIndex("air_day","air_day",{unique:false});
@@ -137,15 +138,14 @@ tv.indexedDB.addShow = function(show){
 	var scope = angular.element($("#addShow")).scope();
 
 	request.onsuccess = function(e){
-        console.log("Show Added.");
-        console.log(e);
+        $.console({message:"Show details saved."});
         scope.$apply(function(){
         	scope.epi = true;
         });
         //tv.network.getEpisodes(show.showid);
     };
     request.onerror = function(e){
-    	console.log("error add show: "+show.title+" or this show is already present.");
+    	$.console({message:"Error while adding show "+show.title+" or this show is already present."});
     	scope.$apply(function(){
         	scope.epi = false;
         });
@@ -206,14 +206,14 @@ tv.indexedDB.addEpisodes = function(episodes,show){
     	request.onsuccess = function(e){
 			total++;
 			if(total==episodes.length){
-				console.log("Episodes added.");
+				$.console({message:"Episode details for "+show.name+" saved."});
 				scope.$apply(function(){
 					scope.img = true;
 				});
 			}
 		};
 		request.onerror = function(e){
-			console.log("Error adding episode.");
+			$.console({message:"Error while adding episode details for "+show.title});
 			scope.$apply(function(){
 				scope.img = false;
 			});
@@ -298,20 +298,17 @@ tv.indexedDB.deleteShowEpisodes = function(id) {
 };
 
 tv.indexedDB.savePoster = function(show){
-	//console.log(show);
   	var db = tv.indexedDB.db;
 	var trans = db.transaction([DB_img],"readwrite");
 	var store = trans.objectStore(DB_img);
 	var request = store.add(show);
 
 	request.onsuccess = function(e){
-		console.log("Poster Saved.");
-		//setTimeout()
+		$.console({message:"Poster saved."});
 	};
 
 	request.onerror = function(e){
-		console.log("Error saving poster.");
-		console.log(e);
+		$.console({message:"Error saving poster."});
 	};
 };
 

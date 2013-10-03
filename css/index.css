@@ -744,7 +744,6 @@ button:hover {
   padding: 4px;
   margin-top: 4px;
   font-size: .5em;
-  background-color: #fff;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   -ms-border-radius: 0px;
@@ -752,7 +751,7 @@ button:hover {
   border-radius: 0px;
 }
 .btn-mini:hover {
-  background-color: transparent;
+  background-color: #d52346;
 }
 .icon {
   width: 14px;
@@ -761,6 +760,10 @@ button:hover {
   vertical-align: text-top;
   background-image: url("../img/icons.png");
   background-color: transparent;
+}
+.icon:hover {
+  background-color: transparent;
+  border-color: transparent;
 }
 .icon-delete {
   background-position: -456px 0;

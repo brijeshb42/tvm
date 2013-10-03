@@ -2,7 +2,6 @@
 @import "mixins";
 
 .confirmDialog{
-	display: none;
 	.overlay{
 		position: fixed;
 		background: #000;
@@ -17,8 +16,8 @@
 	.content{
 		z-index: 400;
 		position: fixed;
-		width: 50%;
-		left: 25%;
+		width: 60%;
+		left: 20%;
 		top: 20%;
 		border: 1px solid #ccc;
 		padding: 5px;
@@ -26,6 +25,21 @@
 		border-bottom-width: @border-show-item;
 		.rounded-corner(2px);
 		.message{
+		}
+	}
+	.message{
+		font-size: 1.2em;
+		p.heading{
+			font-weight: bold;
+			margin: 6px 2px;
+		}
+		p.console{
+			font-size: 1em;
+			font-family: monospace;
+			margin: 4px 2px;
+		}
+		p.error{
+			color: blue;
 		}
 	}
 	.footer{
@@ -47,19 +61,19 @@
 				color: #fff;
 				.transition;
 			}
-			.ok{
+			.ok,.ok:active{
 				background-color: @color-today;
 				border-bottom-color: #0E6E9B;
 			}
-			.ok:active,.ok:hover{
+			.ok:hover{
 				background-color: #0E6E9B;
 				border-bottom-color: @color-today;
 			}
-			.error{
+			.error,.error:active{
 				background-color: @color-yest;
 				border-bottom-color: #A2141F;
 			}
-			.error:active,.error:hover{
+			.error:hover{
 				background-color: #A2141F;
 				border-bottom-color: @color-yest;
 			}

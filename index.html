@@ -12,13 +12,13 @@
         <script src="js/vendor/jquery-1.10.2.min.js"></script>
         <script src="js/vendor/jquery.mousewheel.min.js"></script>
         <script src="js/vendor/jquery.slimscroll.min.js"></script>
-        <script src="js/jquery.confirm.js"></script>
+        <script src="js/jquery.confirm.min.js"></script>
+        <script src="js/jquery.console.min.js"></script>
         <script src="js/vendor/angular.min.js"></script>
         <script src="js/database.min.js"></script>
         <script src="js/index.js"></script>
     </head>
     <body data-ng-app data-ng-csp data-ng-controller="NavController">
-        <!--<h1 id="appTitle">TV Show Manager</h1>-->
         <div id="appTitle">
             <h2>TV SHOW MANAGER</h2>
         </div>
@@ -78,6 +78,26 @@
                     <div class="autoOverflow showHeader"><h2>{{info}}</h2></div>
                 </li>
             </ul>
+            <div id="showInfo" class="show-list" data-ng-show="selectedNav==3" data-ng-controller="ShowInfoController">
+                <h2 style="margin:5px;margin-left:20px;">{{show.data.title}}<button class="btn-mini" style="float:right" data-ng-click="getBack()">&lt;&nbsp;Back</button></h2>
+                <div class="autoOverflow showHeader">
+                    <img src="{{show.img}}" alt="{{show.data.title}}" class="bigImage">
+                    <div class="showDetails">
+                        <p class="nextShow">{{show.data.air_day}}&nbsp;{{show.data.air_time}}</p>
+                        <p class="status">Status: {{status(show.data.ended)}}</p>
+                        <p class="network">Network: {{show.data.network}}</p>
+                        <ul class="genres">
+                            <li class="heading">Genres</li>
+                            <li data-ng-repeat="item in show.data.genres">{{item}}</li>
+                        </ul>
+                        <p class="nextShow">Rating: {{show.data.ratings.percentage}}%</p>
+                        <div class="rating" title="Rating: {{show.data.ratings.percentage}}%">
+                            <div class="percent" style="width:{{show.data.ratings.percentage}}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="overview" style="border:1px solid #ccc;padding:5px">{{show.data.overview}}</p>
+            </div>
             <div class="navs">
                 <ul class="nav-list">
                     <li data-ng-repeat="item in navItems" data-ng-class="{active: $index==selectedNav}">

@@ -64,11 +64,11 @@ function SearchShowsController($scope,$http){
         d.showid = d.tvdb_id;
         delete d["tvdb_id"];
         tv.indexedDB.addShow(d);
-        //console.log(d);
         if($scope.epi===false)
             return;
         $http({method: 'GET',url:urls.proxy+urls.api+urls.id+"/series/"+d.showid+"/all/en.xml"}).
             success(function(data,status,header,config){
+                $.console({message:"Episode details downloaded."});
                 var show = {};
                 $(data).find("Series").each(function(){
                     show.showid = $(this).find("id").text();
@@ -158,7 +158,7 @@ function ShowListController($scope){
     };
 
     $scope.showInfo = function(index){
-        console.log("Info");
+        /*console.log("Info");
         chrome.app.window.create('../info.html',{
             bounds: {
                 width: 450,
@@ -167,6 +167,23 @@ function ShowListController($scope){
             resizable: false
         },function(e){
             e.contentWindow.SHOW = $scope.shows[index];
-        });
+        });*/
+        var scope = angular.element($('body')).scope();
+        scope.changeView(3);
+        var scope2 = angular.element($("#showInfo")).scope();
+        scope2.show = $scope.shows[index];
+    };
+}
+
+function ShowInfoController($scope){
+    $scope.show = {};
+
+    $scope.getBack = function(){
+        var scope = angular.element($('body')).scope();
+        scope.changeView(2);
+    };
+
+    $scope.status = function(st){
+        return (st)?"Ended":"Continuing";
     };
 }

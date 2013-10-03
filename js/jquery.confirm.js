@@ -31,6 +31,14 @@ HTML scaffolding for creating custom confirm box.
 				oncancel: null
 			};
 
+			var options = $.extend(defaults,options);
+
+			$(document).bind("keydown",function(e){
+				if(e.keyCode==27){
+					dialogClosed();
+				}
+			});
+
 			function dialogClosed(callback){
 				if(callback){
 					callback();
@@ -38,16 +46,20 @@ HTML scaffolding for creating custom confirm box.
 				$box.fadeOut(300,function(){
 					$(this).remove();
 				});
+				$(document).unbind("keydown");
 			}
 
 			if($('.'+cls).length>0)
 				$('.'+cls).remove();
 
-			var options = $.extend(defaults,options);
 			var $box = $('<div></div>');
 			$box.addClass(cls).hide().appendTo($('body'));
 			if(options.overlay){
-				$box.append($('<div class="overlay"></div>'));
+				$overlay = $('<div></div>').addClass('overlay');
+				$overlay.click(function(){
+					dialogClosed();
+				});
+				$box.append($overlay);
 			}
 			$content = $('<div></div>').addClass('content');
 			$message = $('<div></div>').addClass('message');

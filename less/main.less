@@ -277,12 +277,11 @@ button:hover{
 	padding: 4px;
 	margin-top: 4px;
 	font-size: .5em;
-	background-color: #fff;
 	.rounded-corner(0px);
 }
 
 .btn-mini:hover{
-	background-color: transparent;
+	background-color: @color-yest;
 }
 
 .icon{
@@ -292,6 +291,11 @@ button:hover{
 	vertical-align: text-top;
 	background-image: url(@icon-path);
 	background-color: transparent;
+}
+
+.icon:hover{
+	background-color: transparent;
+	border-color: transparent;
 }
 
 .icon-delete{
