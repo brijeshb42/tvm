@@ -41,8 +41,10 @@ def createExt(directory,app_dir):
 		if not os.path.isdir(ext_file):
 			print "chrome.exe --pack-extension="+app_dir+" --pack-extension-key="+ext_file
 			os.system("chrome.exe --pack-extension="+app_dir+" --pack-extension-key="+ext_file)
+			shutil.rmtree(APP_DIR)
 	else:
 		os.system("chrome.exe --pack-extension="+app_dir)
+		shutil.rmtree(APP_DIR)
 	#os.system("chrome.exe --pack-extension="+app_dir)# --pack-extension-key="+directory+""
 
 if __name__ == "__main__":
