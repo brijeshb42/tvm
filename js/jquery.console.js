@@ -6,6 +6,7 @@
 			var defaults = {
 				heading: "Please wait...",
 				message: "Default message",
+				type: "",
 				overlay: true,
 				closeText: "Close",
 				onclose: null
@@ -14,7 +15,7 @@
 			var options = $.extend(defaults,options);
 
 			if($('.'+cls).length==1){
-				$p = $('<p></p>').addClass('console').html(options.message);
+				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
 				$('.'+cls).find('.message').append($p);
 				return;
 			}
@@ -41,7 +42,7 @@
 			$content = $('<div></div>').addClass('content');
 			$message = $('<div></div>').addClass('message');
 			$heading = $('<p></p>').addClass('heading').html(options.heading);
-			$log = $('<p></p>').addClass('console').html(options.message);
+			$log = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
 			$message.append($heading).append($log);
 			$footer = $('<div></div>').addClass('footer');
 			$controls = $('<div></div>').addClass('controls');

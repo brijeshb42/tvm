@@ -703,18 +703,6 @@ body {
   background-color: #d52346;
   height: 100%;
 }
-.episodeContent {
-  margin-left: 20px;
-}
-.episodeContent #episodeForm {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.episodeContent #episodeForm h2 {
-  float: left;
-  padding: 0;
-  margin: 0;
-}
 #addShow {
   text-align: center;
 }
@@ -771,12 +759,12 @@ button:hover {
 .icon-info {
   background-position: -120px -96px;
 }
-#searchBox {
+form {
   border: 1px solid #ccc;
   text-align: center;
   padding: 10px;
 }
-#searchBox input[type="text"] {
+form input[type="text"] {
   min-height: 30px;
   font-size: 1.5em;
   border: 4px solid #4a9fee;
@@ -785,21 +773,47 @@ button:hover {
   font-family: "Prosto One";
   color: #00386d;
 }
-#searchBox input[type="text"]:focus {
+form input[type="text"]:focus {
   border-color: #f86300;
   outline: 0;
 }
-#searchBox p {
+form p {
   font-size: 1em;
   padding: 0;
   margin: 0;
   margin-top: 5px;
 }
-#searchBox p.error {
+form p.error {
   color: #d52346;
 }
-#searchBox p.message {
+form p.message {
   color: #00386d;
+}
+.episodeDetails {
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+.episodeDetails .episodeForm {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+.episodeDetails .episodeForm input[type=text],
+.episodeDetails .episodeForm input[type=text]:focus {
+  width: 50px;
+  border-width: 1px;
+  font-size: 0.9em;
+  min-height: 20px;
+  text-align: center;
+}
+.episodeDetails .episodeForm button[type=submit] {
+  padding: 5px 10px;
+  font-size: 1em;
+  border-radius: 3px;
+}
+.episodeDetails .details {
+  padding: 5px;
 }
 #searchList {
   margin: 0;

@@ -15,7 +15,7 @@
         <script src="js/jquery.confirm.min.js"></script>
         <script src="js/jquery.console.min.js"></script>
         <script src="js/vendor/angular.min.js"></script>
-        <script src="js/database.min.js"></script>
+        <script src="js/database.js"></script>
         <script src="js/index.js"></script>
     </head>
     <body data-ng-app data-ng-csp data-ng-controller="NavController">
@@ -24,7 +24,7 @@
         </div>
         <div id="content">
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
-                <li data-ng-repeat="item in shows | orderBy:'data.airdate':false" class="list-item {{dayType(item.data.airdate)}}">
+                <li data-ng-repeat="item in shows track by $index | orderBy:'data.airdate':false" class="list-item {{dayType(item.data.airdate)}}">
                     <div class="autoOverflow showHeader">
                         <img src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
                         <h3 class="showTitle">{{item.data.showname}}</h3>
@@ -32,6 +32,7 @@
                         <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>
                         <p class="datetime">{{formatDate(item.data.airdate)}}&nbsp;<span class="day">({{dayType(item.data.airdate)}})</span></p>
                         <p class="overview">{{item.data.overview}}</p>
+                        <div class="controlBar" data-ng-show="showBtn($index)"><button data-ng-click="updateEpisode($index)">Update</button></div>
                     </div>
                 </li>
                 <li class="list-item" data-ng-show="noUpcoming" style="text-align:center">
@@ -97,6 +98,20 @@
                     </div>
                 </div>
                 <p class="overview" style="border:1px solid #ccc;padding:5px">{{show.data.overview}}</p>
+                <div class="episodeDetails">
+                    <form method="get" data-ng-submit="getEpisode()" class="episodeForm">
+                        <span>Get Info for:</span>
+                        <input type="text" data-ng-model="seasonNum" id="seasonNumber" placeholder="Season"/>
+                        <input type="text" data-ng-model="episodeNum" id="episodeNumber" placeholder="Episode"/>
+                        <button type="submit">GET</button>
+                        <p class="error" data-ng-show="error==true">{{message}}</p>
+                    </form>
+                    <div class="details" data-ng-show="showDetails==true">
+                        <h2 class="showTitle">{{episode.name}}</h2>
+                        <p class="nextShow">{{getDate(episode.airdate)}}</p>
+                        <p class="overview">{{episode.overview}}</p>
+                    </div>
+                </div>
             </div>
             <div class="navs">
                 <ul class="nav-list">

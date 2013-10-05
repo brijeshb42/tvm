@@ -38,7 +38,10 @@
   margin: 4px 2px;
 }
 .confirmDialog .message p.error {
-  color: blue;
+  color: #d52346;
+}
+.confirmDialog .message p.success {
+  color: #4a9fee;
 }
 .confirmDialog .footer {
   margin-top: 5px;

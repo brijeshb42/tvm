@@ -1,8 +1,3 @@
-function getImgId(url){
-    var s = url.substring(url.lastIndexOf('/')+1,url.length);
-    return s;
-}
-
 (function($){
     $(window).load(function(){
     	$('a').on("click",function(){
@@ -63,44 +58,7 @@ function SearchShowsController($scope,$http){
         var d = $scope.shows[index];
         d.showid = d.tvdb_id;
         delete d["tvdb_id"];
-        tv.indexedDB.addShow(d);
-        if($scope.epi===false)
-            return;
-        $http({method: 'GET',url:urls.proxy+urls.api+urls.id+"/series/"+d.showid+"/all/en.xml"}).
-            success(function(data,status,header,config){
-                $.console({message:"Episode details downloaded."});
-                var show = {};
-                $(data).find("Series").each(function(){
-                    show.showid = $(this).find("id").text();
-                    show.poster = $(this).find("poster").text();
-                    show.name = $(this).find("SeriesName").text();
-                });
-                var episodes = [];
-                $(data).find("Episode").each(function(){
-                    var epi = {};
-                    epi.name = $(this).find("EpisodeName").text();
-                    epi.showname = show.name;
-                    epi.showid = $(this).find("seriesid").text();
-                    epi.episodeID = $(this).find("id").text();
-                    epi.overview = $(this).find("Overview").text();
-                    epi.guestStars = $(this).find("GuestStars").text();
-                    epi.airdate = $(this).find("FirstAired").text();
-                    epi.season = $(this).find("SeasonNumber").text();
-                    epi.episode = $(this).find("EpisodeNumber").text();
-                    epi.lastUpdated = $(this).find("lastupdated").text();
-                    episodes.push(epi);
-                });
-                tv.indexedDB.addEpisodes(episodes,show);
-            }).
-            error(function(data,status,header,config){
-                $scope.msg = "There was an error while downloading episode list.";
-                $scope.class = "error";
-            });
-        if($scope.img===false)
-            return;
-        var ur = urls.proxy+u.poster+getImgId(d.images.poster);
-        //console.log(ur);
-        tv.network.getPoster(d.showid,ur);
+        tv.network.getAllData(d);
     };
 }
 
@@ -128,9 +86,20 @@ function UpcomingController($scope){
             return "yet-to-come";
         }
     };
+
+    $scope.showBtn = function(index){
+        if($scope.shows[index].data.overview=="" || $scope.shows[index].data.overview.length<10)
+            return true;
+        return false;
+    };
+
+    $scope.updateEpisode = function(index){
+        console.log($scope.shows[index].data);
+        //tv.network.getEpisodeDetail($scope.shows[index].data.episodeID);
+    };
 }
 
-function ShowListController($scope){
+function ShowListController($scope,$http){
     $scope.shows = [];
     $scope.info = "Loading shows...";
     $scope.noAdded = true;
@@ -158,25 +127,20 @@ function ShowListController($scope){
     };
 
     $scope.showInfo = function(index){
-        /*console.log("Info");
-        chrome.app.window.create('../info.html',{
-            bounds: {
-                width: 450,
-                height: 600
-            },
-            resizable: false
-        },function(e){
-            e.contentWindow.SHOW = $scope.shows[index];
-        });*/
         var scope = angular.element($('body')).scope();
         scope.changeView(3);
         var scope2 = angular.element($("#showInfo")).scope();
         scope2.show = $scope.shows[index];
+        scope2.episode = {};
     };
 }
 
 function ShowInfoController($scope){
     $scope.show = {};
+    $scope.episode = {name:"",overview:"",airdate:""};
+    $scope.showDetails = false;
+    $scope.error = false;
+    $scope.message = "Enter both season and episode number.";
 
     $scope.getBack = function(){
         var scope = angular.element($('body')).scope();
@@ -185,5 +149,23 @@ function ShowInfoController($scope){
 
     $scope.status = function(st){
         return (st)?"Ended":"Continuing";
+    };
+
+    $scope.getEpisode = function(){
+        if(!$scope.seasonNum || !$scope.episodeNum || $scope.seasonNum=="" || $scope.episodeNum==""){
+            $scope.error = true;
+            $scope.showDetails = false;
+            $scope.message = "Enter both season and episode number.";
+            return;
+        }
+        $scope.error = false;
+        $scope.showDetails = true;
+        tv.indexedDB.getEpisodeDetail($scope.show.data.showid,$scope.seasonNum,$scope.episodeNum);
+    };
+
+    $scope.getDate = function(date){
+        if(!date || date.length<10)
+            return "";
+        return "Premiered on: "+tv.ui.formatDate(date);
     };
 }

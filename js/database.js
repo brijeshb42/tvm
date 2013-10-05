@@ -54,7 +54,7 @@ tv.ui.formatDate =  function(date){
 		return dt;
 };
 
-tv.ui.getDataUrl = function(blob,showid) {
+tv.ui.getDataUrl = function(show,episodes,blob) {
 	var im = URL.createObjectURL(blob);
 	var image = new Image();
 	var canvas = document.createElement("canvas");
@@ -67,12 +67,74 @@ tv.ui.getDataUrl = function(blob,showid) {
     	ctx.drawImage(this, 0, 0,width,height);
     	var dataURL = canvas.toDataURL(blob.type);
     	URL.revokeObjectURL(im);
-    	var show = {};
-    	show.showid = showid;
-    	show.img = dataURL;
-    	tv.indexedDB.savePoster(show);
+    	var sho = {};
+    	sho.showid = show.showid;
+    	sho.img = dataURL;
+    	tv.indexedDB.addShow(show,episodes,sho);
 	};
 	image.src = im;
+};
+
+tv.ui.getImgId = function(url){
+    var s = url.substring(url.lastIndexOf('/')+1,url.length);
+    return s;
+};
+
+
+tv.network.getAllData = function(sho){
+    $.console({message:"Downloading episode details."});
+        $.ajax({
+            url : urls.proxy+urls.api+urls.id+"/series/"+sho.showid+"/all/en.xml",
+            type: 'GET',
+            dataType: "xml",
+            success: function(data){
+                $.console({message:"Episode details downloaded."});
+                var show = {};
+                $(data).find("Series").each(function(){
+                    show.showid = $(this).find("id").text();
+                    show.poster = $(this).find("poster").text();
+                    show.name = $(this).find("SeriesName").text();
+                });
+                var episodes = [];
+                $(data).find("Episode").each(function(){
+                    var epi = {};
+                    epi.name = $(this).find("EpisodeName").text();
+                    epi.showname = show.name;
+                    epi.showid = $(this).find("seriesid").text();
+                    epi.episodeID = $(this).find("id").text();
+                    epi.overview = $(this).find("Overview").text();
+                    epi.guestStars = $(this).find("GuestStars").text();
+                    epi.airdate = $(this).find("FirstAired").text();
+                    epi.season = $(this).find("SeasonNumber").text();
+                    epi.episode = $(this).find("EpisodeNumber").text();
+                    epi.lastUpdated = $(this).find("lastupdated").text();
+                    episodes.push(epi);
+                });
+                //console.log(data);
+
+                //var total = 0;
+
+                var imgUrl = urls.proxy+u.poster+tv.ui.getImgId(sho.images.poster);
+                $.console({message:"Downloading show poster."});
+                var img = new XMLHttpRequest();
+                img.responseType = 'blob';
+                img.onload = function(){
+                    $.console({message:"Poster downloaded."});
+                    tv.ui.getDataUrl(sho,episodes,this.response);
+                };
+                img.onerror = function(e){
+                    console.log(e);
+                };
+                img.open('GET',imgUrl, true);
+                img.send();
+            },
+            error: function(xhr,status){
+                $.console({message:"Episode list not downloaded. Try to add the show again.",type:"error"});
+                //console.log(xhr);
+                //console.log(status);
+                //transaction.abort();
+            }
+        });
 };
 
 tv.network.getPoster = function(showid,url){
@@ -87,7 +149,13 @@ tv.network.getPoster = function(showid,url){
     img.send();
 };
 
+tv.network.getEpisode = function(id){
+
+};
+
+
 tv.indexedDB.db = null;
+
 tv.indexedDB.open = function(from){
 	var version = 1;
 	var request = indexedDB.open(DB,version);
@@ -106,15 +174,15 @@ tv.indexedDB.open = function(from){
 		var store2 = db.createObjectStore(DB_epi,{keyPath:"episodeID"});
 		store2.createIndex("showid","showid",{unique:false});
 		store2.createIndex("airdate","airdate",{unique:false});
-		store2.createIndex("season","season",{unique:false});
-		store2.createIndex("episode","episode",{unique:false});
+		store2.createIndex("showSeason",["showid","season"],{unique:false});
+		store2.createIndex("showSeasonEpisode",["showid","season","episode"],{unique:true});
 
 		var store3 = db.createObjectStore(DB_img,{keyPath:"showid"});
 	};
 
 	request.onsuccess = function(e){
 		tv.indexedDB.db = e.target.result;
-		console.log("DB Opened.");
+		//console.log("DB Opened.");
 		if(from==="back"){
 			tv.indexedDB.getTodayCount();
 		}else if(from==="info"){
@@ -130,9 +198,9 @@ tv.indexedDB.open = function(from){
 	request.onerror = tv.indexedDB.onerror;
 };
 
-tv.indexedDB.addShow = function(show){
+/*tv.indexedDB.addShow = function(show){
 	var db = tv.indexedDB.db;
-	var trans = db.transaction([DB_show],"readwrite");
+	var trans = db.transaction([DB_show,DB_epi,DB_img],"readwrite");
 	var store = trans.objectStore(DB_show);
 	var request = store.add(show);
 	var scope = angular.element($("#addShow")).scope();
@@ -194,7 +262,7 @@ tv.indexedDB.getAllShows = function(){
 	}
 };
 
-tv.indexedDB.addEpisodes = function(episodes,show){
+/*tv.indexedDB.addEpisodes = function(episodes,show){
 	var db = tv.indexedDB.db;
 	var trans = db.transaction([DB_epi],"readwrite");
 	var store = trans.objectStore(DB_epi);
@@ -242,7 +310,7 @@ tv.indexedDB.getEpisodes = function(showid){
 	}
 };
 
-tv.indexedDB.deleteShow = function(id) {
+/*tv.indexedDB.deleteShow = function(id) {
   var db = tv.indexedDB.db;
   var trans = db.transaction([DB_show], "readwrite");
   var store = trans.objectStore(DB_show);
@@ -321,7 +389,7 @@ tv.indexedDB.getPoster = function(id){
 	req.onsuccess = function(e){
 		tv.ui.renderImg(req.result);
 	};
-};
+};*/
 
 tv.indexedDB.getToday = function(){
 	var db = tv.indexedDB.db;
@@ -355,7 +423,7 @@ tv.indexedDB.getTodayCount = function(){
 	req.onsuccess = function(e){
 		var count = e.target.result;
 		var c = count.toString();
-		console.log(count);
+		//console.log(count);
 		var notification;
 		if(count==0){
 			notification = webkitNotifications.createNotification(
@@ -376,6 +444,39 @@ tv.indexedDB.getTodayCount = function(){
 	};
 };
 
+tv.indexedDB.addShow = function(show,episodes,img){
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readwrite");
+
+	transaction.oncomplete = function(e){
+		$.console({message:"Show "+show.title+" saved. You can now close this box.",type:"success"});
+		var scope = angular.element($("#addShow")).scope();
+		scope.shows = [];
+		scope.isShown = false;
+		tv.indexedDB.getAll();
+	};
+
+	transaction.onabort = function(){
+		$.console({message:"This show already exists or some error encountered. Show not saved."});
+	};
+
+	//var showCursor,epiCursor,imgCursor;
+
+	var showStore = transaction.objectStore(DB_show);
+	var epiStore = transaction.objectStore(DB_epi);
+	var imgStore = transaction.objectStore(DB_img);
+
+	var showRequest = showStore.add(show);
+	showRequest.onerror = function(){
+		$.console({message:"There was an error.",type:"error"});
+		transaction.abort();
+	};
+	for(var i = 0;i<episodes.length;i++){
+		var epiRequest = epiStore.add(episodes[i]);
+	}
+	var imgRequest = imgStore.add(img);
+}
+
 tv.indexedDB.getAll = function(){
 	var showS = {};
 	var epiS = {};
@@ -390,7 +491,7 @@ tv.indexedDB.getAll = function(){
 	scopeUpcoming.noUpcoming = true;
 
 	transaction.oncomplete = function(){
-		console.log("All transaction complete.");
+		//console.log("All transaction complete.");
 		for(var key in showS){
 			showS[key].img = imgS[showS[key].data.showid].img;
 			if(showS.hasOwnProperty(key)){
@@ -440,7 +541,7 @@ tv.indexedDB.getAll = function(){
 
 	var epiStore = transaction.objectStore(DB_epi);
 	var y = tv.ui.getDate(-1);
-	var n = tv.ui.getDate(5);
+	var n = tv.ui.getDate(15);
 	var epiIndex = epiStore.index("airdate");
 	var range = IDBKeyRange.bound(y,n,false,false);
 
@@ -473,33 +574,34 @@ tv.indexedDB.deleteShowComplete = function(id) {
   	var trans = db.transaction([DB_show,DB_epi,DB_img], "readwrite");
 
   	trans.oncomplete = function(){
+  		$.console({message:"Show deleted."})
   		tv.indexedDB.getAll();
   	};
   	trans.onerror = function(){
-  		console.log("error during deleteion");
+  		$.console({message:"Error during deletion.",type:"error"});
   	};
   
   	var showStore = trans.objectStore(DB_show);
 
   	var showDelRequest = showStore.delete(id);
-  	showDelRequest.onsuccess = function(e) {
-  		console.log("show details deleted");
+  	/*showDelRequest.onsuccess = function(e) {
+  		console.log("Show details deleted");
   	};
 
   	showDelRequest.onerror = function(e) {
     	console.log("Error deleting show details.");
-  	};
+  	};*/
 
   	var imgStore = trans.objectStore(DB_img);
   	var imgDelRequest = imgStore.delete(id);
 
-  	imgDelRequest.onsuccess = function(e) {
+  	/*imgDelRequest.onsuccess = function(e) {
     	console.log("show img deleted");
   	};
 
   	imgDelRequest.onerror = function(e) {
     	console.log("show img not deleted");
-  	};
+  	};*/
 
 	var epiStore = trans.objectStore(DB_epi);
 	var index = epiStore.index("showid");
@@ -512,7 +614,49 @@ tv.indexedDB.deleteShowComplete = function(id) {
 			cursor.continue();
 		}
 	};
-	req.onerror = function(){
+	/*req.onerror = function(){
 		console.log("Error opening DB.");
+	};*/
+};
+
+tv.indexedDB.getEpisodeDetail = function(showid,season,episode){
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_epi],"readonly");
+	var epiStore = transaction.objectStore(DB_epi);
+	var epiIndex = epiStore.index("showSeasonEpisode");
+	var range = new IDBKeyRange.only([showid.toString(),season.toString(),episode.toString()]);
+
+	var scope = angular.element($("#showInfo")).scope();
+
+	epiIndex.count(range).onsuccess = function(e){
+		if(e.target.result>0){
+			var req = epiIndex.openCursor(range);
+			req.onsuccess = function(event){
+				var cursor = event.target.result;
+				if(!cursor)
+					return;
+				scope.episode = cursor.value;
+				scope.error = false;
+				scope.showDetails = true;
+			};
+		}else{
+			$.console({message:"No info found for season "+season+" episode "+episode,heading:"Error..."});
+		}
+	};
+};
+
+tv.indexedDB.exists = function(showid){
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_show],"readonly");
+	var showStore = transaction.objectStore(DB_epi);
+	var showIndex = epiStore.index("showid");
+	var range = new IDBKeyRange.only(showid.toString());
+
+	epiIndex.count(range).onsuccess = function(e){
+		if(e.target.result>0){
+			return true;
+		}else{
+			$.console({message:"This show already exists",type:"error"});
+		}
 	};
 };

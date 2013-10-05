@@ -240,20 +240,6 @@ body{
 	}
 }
 
-.episodeContent{
-	margin-left: 20px;
-	#episodeForm{
-		margin-top: 10px;
-		margin-bottom: 10px;
-		h2{
-			float: left;
-			padding: 0;
-			margin: 0;
-		}
-	}
-}
-
-
 #addShow{
 	text-align: center;
 }
@@ -306,8 +292,7 @@ button:hover{
 	background-position: -120px -96px;
 }
 
-#searchBox{
-	//width: 95%;
+form{
 	border: 1px solid #ccc;
 	text-align: center;
 	padding: 10px;
@@ -337,6 +322,33 @@ button:hover{
 		color: @color-form-text;
 	}
 }
+
+.episodeDetails{
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	padding: 5px;
+	.episodeForm{
+		border: none;
+		border-bottom: 1px solid #ccc;
+		text-align: left;
+		input[type=text],input[type=text]:focus{
+			width: 50px;
+			border-width: 1px;
+			font-size: 0.9em;
+			min-height: 20px;
+			text-align: center;
+		}
+		button[type=submit]{
+			padding: 5px 10px;
+			font-size: 1em;
+			border-radius: 3px;
+		}
+	}
+	.details{
+		padding: 5px;
+	}
+}
+
 #searchList{
 	margin: 0;
 	padding: 0;
