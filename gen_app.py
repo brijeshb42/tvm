@@ -2,7 +2,7 @@ import os
 import json
 import shutil
 
-APP = "dist"
+APP = "tvm"
 CWD = os.getcwd()
 APP_DIR = os.path.join(CWD,APP)
 JSON_FILE = "required.json"
@@ -13,12 +13,12 @@ def createAppDir():
 	os.mkdir(APP_DIR)
 
 def createFiles(directory,app_dir,data):
-	print "Main"
-	print directory
-	print app_dir
+	#print "Main"
+	#print directory
+	#print app_dir
 	for dirs in data:
-		print "\n"
-		print dirs
+		#print "\n"
+		#print dirs
 		if dirs!="base":
 			os.mkdir(os.path.join(app_dir,dirs))
 		if isinstance(data[dirs],dict):
@@ -26,19 +26,29 @@ def createFiles(directory,app_dir,data):
 		elif isinstance(data[dirs],list):
 			if dirs == "base":
 				for fil in data[dirs]:
-					print os.path.join(app_dir,fil)
+					#print os.path.join(app_dir,fil)
 					shutil.copyfile(os.path.join(directory,fil),os.path.join(app_dir,fil))
 			else:
-				print "---"
-				print os.path.join(app_dir,dirs)
+				#print "---"
+				#print os.path.join(app_dir,dirs)
 				for fil in data[dirs]:
-					print "--"
-					print os.path.join(os.path.join(app_dir,dirs),fil)
+					#print "--"
+					#print os.path.join(os.path.join(app_dir,dirs),fil)
 					shutil.copyfile(os.path.join(os.path.join(directory,dirs),fil),os.path.join(os.path.join(app_dir,dirs),fil))
+def createExt(directory,app_dir):
+	ext_file =  os.path.join(directory,APP+".pem")
+	if os.path.exists(ext_file):
+		if not os.path.isdir(ext_file):
+			print "chrome.exe --pack-extension="+app_dir+" --pack-extension-key="+ext_file
+			os.system("chrome.exe --pack-extension="+app_dir+" --pack-extension-key="+ext_file)
+	else:
+		os.system("chrome.exe --pack-extension="+app_dir)
+	#os.system("chrome.exe --pack-extension="+app_dir)# --pack-extension-key="+directory+""
 
 if __name__ == "__main__":
 	createAppDir()
 	json_data = open(JSON_FILE)
 	data = json.load(json_data)
 	createFiles(CWD,APP_DIR,data);
+	createExt(CWD,APP_DIR)
 	json_data.close()
