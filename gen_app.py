@@ -13,12 +13,7 @@ def createAppDir():
 	os.mkdir(APP_DIR)
 
 def createFiles(directory,app_dir,data):
-	#print "Main"
-	#print directory
-	#print app_dir
 	for dirs in data:
-		#print "\n"
-		#print dirs
 		if dirs!="base":
 			os.mkdir(os.path.join(app_dir,dirs))
 		if isinstance(data[dirs],dict):
@@ -26,14 +21,9 @@ def createFiles(directory,app_dir,data):
 		elif isinstance(data[dirs],list):
 			if dirs == "base":
 				for fil in data[dirs]:
-					#print os.path.join(app_dir,fil)
 					shutil.copyfile(os.path.join(directory,fil),os.path.join(app_dir,fil))
 			else:
-				#print "---"
-				#print os.path.join(app_dir,dirs)
 				for fil in data[dirs]:
-					#print "--"
-					#print os.path.join(os.path.join(app_dir,dirs),fil)
 					shutil.copyfile(os.path.join(os.path.join(directory,dirs),fil),os.path.join(os.path.join(app_dir,dirs),fil))
 def createExt(directory,app_dir):
 	ext_file =  os.path.join(directory,APP+".pem")
@@ -45,7 +35,6 @@ def createExt(directory,app_dir):
 	else:
 		os.system("chrome.exe --pack-extension="+app_dir)
 		shutil.rmtree(APP_DIR)
-	#os.system("chrome.exe --pack-extension="+app_dir)# --pack-extension-key="+directory+""
 
 if __name__ == "__main__":
 	createAppDir()
