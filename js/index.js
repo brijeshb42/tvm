@@ -93,9 +93,9 @@ function UpcomingController($scope){
         return false;
     };
 
-    $scope.updateEpisode = function(index){
-        console.log($scope.shows[index].data);
-        //tv.network.getEpisodeDetail($scope.shows[index].data.episodeID);
+    $scope.updateEpisode = function(index,showname){
+        //console.log($scope.shows[index].data);
+        tv.network.getEpisode(index,$scope.shows[index].data.episodeID,$scope.shows[index].data.showname);
     };
 }
 

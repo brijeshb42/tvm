@@ -85,7 +85,7 @@ tv.network.getAllData = function(sho){
     $.console({message:"Downloading episode details."});
         $.ajax({
             url : urls.proxy+urls.api+urls.id+"/series/"+sho.showid+"/all/en.xml",
-            type: 'GET',
+            type: "GET",
             dataType: "xml",
             success: function(data){
                 $.console({message:"Episode details downloaded."});
@@ -149,8 +149,37 @@ tv.network.getPoster = function(showid,url){
     img.send();
 };
 
-tv.network.getEpisode = function(id){
-
+tv.network.getEpisode = function(index,id,showname){
+	var URL = urls.proxy+urls.api+urls.id+"/episodes/"+id+"/en.xml";
+	$.ajax({
+		url: URL,
+		type: 'GET',
+		dataType: 'xml',
+		success: function(data){
+			var epi = {};
+            $(data).find("Episode").each(function(){
+                epi.name = $(this).find("EpisodeName").text();
+                epi.showname = showname;
+                epi.showid = $(this).find("seriesid").text();
+                epi.episodeID = $(this).find("id").text();
+                epi.overview = $(this).find("Overview").text();
+                epi.guestStars = $(this).find("GuestStars").text();
+                epi.airdate = $(this).find("FirstAired").text();
+                epi.season = $(this).find("SeasonNumber").text();
+                epi.episode = $(this).find("EpisodeNumber").text();
+                epi.lastUpdated = $(this).find("lastupdated").text();
+            });
+            if(epi.overview=="" || epi.overview.length<5){
+            	$.console({message:"Detail of this episode is not yet available."});
+            	return;
+            }
+            tv.indexedDB.updateEpisode(index,epi);
+            //console.log(epi);
+		},
+		error: function(){
+			$.console({message:"Episode details could not be downloaded.",type:"error"});
+		}
+	});
 };
 
 
@@ -541,7 +570,7 @@ tv.indexedDB.getAll = function(){
 
 	var epiStore = transaction.objectStore(DB_epi);
 	var y = tv.ui.getDate(-1);
-	var n = tv.ui.getDate(15);
+	var n = tv.ui.getDate(5);
 	var epiIndex = epiStore.index("airdate");
 	var range = IDBKeyRange.bound(y,n,false,false);
 
@@ -658,5 +687,22 @@ tv.indexedDB.exists = function(showid){
 		}else{
 			$.console({message:"This show already exists",type:"error"});
 		}
+	};
+};
+
+tv.indexedDB.updateEpisode = function(episode){
+	var db = tv.indexedDB.db;
+	var transaction = db.transaction([DB_epi],"readonly");
+	var store = transaction.objectStore(DB_epi);
+	var range = IDBKeyRange.only(episode.episodeID);
+	var cursor = store.openCursor(range);
+	cursor.onsuccess = function(event){
+		var cur = event.target.result;
+		var req = cur.update(episode);
+		req.onsuccess = function(){
+			//$.console({message:"Episode details updated."});
+			var scope = angular.element($("todayList")).scope();
+			scope.shows[index].data.overview = episode.overview;
+		};
 	};
 };
