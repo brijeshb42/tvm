@@ -62,13 +62,13 @@
             </div>
             <ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
             <!--li.list-item>div.autoOverflow.showHeader>img.showImg+h3.showTitle+p.nextShow-->
-                <li class="list-item" data-ng-repeat="item in shows track by $index">
+                <li class="list-item" data-ng-repeat="item in shows | orderBy:'item.data.title':false track by $index">
                     <div class="autoOverflow showHeader">
                         <div class="controlBar">
                             <button data-ng-click="deleteShow($index)" title="Delete Show" class="btn-mini icon icon-delete"></button>
                             <button data-ng-click="showInfo($index)" title="View Full Info" class="btn-mini icon icon-info"></button>
                         </div>
-                        <img src="{{item.img}}" alt="{{item.title}}" class="showImg showImgSmall">
+                        <img src="{{item.img}}" alt="{{item.data.title}}" class="showImg showImgSmall">
                         <h3 class="showTitle">{{item.data.title}}</h3>
                         <p class="nextShow">{{item.data.air_day}}&nbsp;{{item.data.air_time}}&nbsp;on&nbsp;{{item.data.network}}</p>
                         <p class="overview">{{status(item.data.ended)}}</p>

@@ -35,8 +35,10 @@ def createExt(directory,app_dir):
 	else:
 		os.system("chrome --pack-extension="+app_dir)
 		shutil.rmtree(APP_DIR)
+	print "Extension created."
 
 if __name__ == "__main__":
+	os.system("make.bat")
 	createAppDir()
 	json_data = open(JSON_FILE)
 	data = json.load(json_data)

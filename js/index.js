@@ -7,6 +7,9 @@
     		height: "475px",
     		railVisible: true
     	});
+        $(document).on("contextmenu",function(e){
+            e.preventDefault();
+        });
         tv.indexedDB.open();
     });
 })(jQuery);
