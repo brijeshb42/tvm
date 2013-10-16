@@ -30,15 +30,23 @@ def createExt(directory,app_dir):
 	if os.path.exists(ext_file):
 		if not os.path.isdir(ext_file):
 			#print "chrome --pack-extension="+app_dir+" --pack-extension-key="+ext_file
-			os.system("chrome --pack-extension="+app_dir+" --pack-extension-key="+ext_file)
-			shutil.rmtree(APP_DIR)
+			if os.name=="posix":
+				os.system("google-chrome --pack-extension="+app_dir+" --pack-extension-key="+ext_file)
+			else:
+				os.system("chrome --pack-extension="+app_dir+" --pack-extension-key="+ext_file)
 	else:
-		os.system("chrome --pack-extension="+app_dir)
-		shutil.rmtree(APP_DIR)
+		if os.name=="posix":
+			os.system("google-chrome --pack-extension="+app_dir)
+		else:
+			os.system("chrome --pack-extension="+app_dir)
+	shutil.rmtree(APP_DIR)
 	print "Extension created."
 
 if __name__ == "__main__":
-	os.system("make.bat")
+	if os.name=="posix":
+		os.system("make")
+	else:
+		os.system("make.bat")
 	createAppDir()
 	json_data = open(JSON_FILE)
 	data = json.load(json_data)
