@@ -91,14 +91,12 @@ function UpcomingController($scope){
     };
 
     $scope.showBtn = function(index){
-        if($scope.shows[index].data.overview=="" || $scope.shows[index].data.overview.length<10)
-            return true;
-        return false;
+        return true;
     };
 
-    $scope.updateEpisode = function(index,showname){
-        //console.log($scope.shows[index].data);
-        tv.network.getEpisode(index,$scope.shows[index].data.episodeID,$scope.shows[index].data.showname);
+    $scope.updateEpisode = function(id,showname){
+        //console.log(index);
+        tv.network.getEpisode(id,showname);
     };
 }
 

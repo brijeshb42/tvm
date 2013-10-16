@@ -149,7 +149,8 @@ tv.network.getPoster = function(showid,url){
     img.send();
 };
 
-tv.network.getEpisode = function(index,id,showname){
+tv.network.getEpisode = function(id,showname){
+	$.console({message:"Updating episode information."});
 	var URL = urls.proxy+urls.api+urls.id+"/episodes/"+id+"/en.xml";
 	$.ajax({
 		url: URL,
@@ -173,7 +174,7 @@ tv.network.getEpisode = function(index,id,showname){
             	$.console({message:"Detail of this episode is not yet available."});
             	return;
             }
-            tv.indexedDB.updateEpisode(index,epi);
+            tv.indexedDB.updateEpisode(epi);
             //console.log(epi);
 		},
 		error: function(){
@@ -692,7 +693,7 @@ tv.indexedDB.exists = function(showid){
 
 tv.indexedDB.updateEpisode = function(episode){
 	var db = tv.indexedDB.db;
-	var transaction = db.transaction([DB_epi],"readonly");
+	var transaction = db.transaction([DB_epi],"readwrite");
 	var store = transaction.objectStore(DB_epi);
 	var range = IDBKeyRange.only(episode.episodeID);
 	var cursor = store.openCursor(range);
@@ -700,9 +701,8 @@ tv.indexedDB.updateEpisode = function(episode){
 		var cur = event.target.result;
 		var req = cur.update(episode);
 		req.onsuccess = function(){
-			//$.console({message:"Episode details updated."});
-			var scope = angular.element($("todayList")).scope();
-			scope.shows[index].data.overview = episode.overview;
+			$.console({message:"Episode details updated.",type:"success"});
+			tv.indexedDB.getAll();
 		};
 	};
 };
