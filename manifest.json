@@ -12,5 +12,6 @@
 	"permissions": [
 		"storage","notifications","<all_urls>"
 	],
-	"icons": { "16": "tv16.png", "48": "tv48.png", "128": "tv128.png" }
+	"icons": { "16": "tv16.png", "48": "tv48.png", "128": "tv128.png" },
+	"update_url": "http://brijeshb42.github.io/update.xml"
 }
