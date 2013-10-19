@@ -6,5 +6,5 @@ chrome.app.runtime.onLaunched.addListener(function(){
 		},
 		resizable: false
 	});
-	//tv.indexedDB.open("back");
+	tv.indexedDB.open("back");
 });
