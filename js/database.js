@@ -468,6 +468,7 @@ tv.indexedDB.getTodayCount = function(){
 			);
 		}
 		notification.show();
+		setTimeout(function(){notification.cancel()},5000);
 	};
 };
 
