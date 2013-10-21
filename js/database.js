@@ -212,15 +212,12 @@ tv.indexedDB.open = function(from){
 
 	request.onsuccess = function(e){
 		tv.indexedDB.db = e.target.result;
-		//console.log("DB Opened.");
 		if(from==="back"){
 			tv.indexedDB.getTodayCount();
 		}else if(from==="info"){
 
 		}
 		else{
-			/*tv.indexedDB.getJoinUpcoming();
-			tv.indexedDB.getJoinAll();*/
 			tv.indexedDB.getAll();
 		}
 	};
