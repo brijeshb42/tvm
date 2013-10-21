@@ -62,7 +62,7 @@
             </div>
             <ul id="showList" class="show-list" data-ng-show="selectedNav==2" data-ng-controller="ShowListController">
             <!--li.list-item>div.autoOverflow.showHeader>img.showImg+h3.showTitle+p.nextShow-->
-                <li class="list-item" data-ng-repeat="item in shows | orderBy:'item.data.title':false track by $index">
+                <li class="list-item" data-ng-repeat="item in shows track by $index">
                     <div class="autoOverflow showHeader">
                         <div class="controlBar">
                             <button data-ng-click="deleteShow($index)" title="Delete Show" class="btn-mini icon icon-delete"></button>
