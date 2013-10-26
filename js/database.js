@@ -455,15 +455,15 @@ tv.indexedDB.getTodayCount = function(){
 		if(count==0){
 			notification = webkitNotifications.createNotification(
   				'tv128.png',  // icon url - can be relative
-  				'TV!',  // notification title
-  				'No shows today.'  // notification body text
+  				'Today on TV',  // notification title
+  				'No show today.'  // notification body text
 			);
 			//tv.ui.renderPopup(0);
 		}
 		else{
 			notification = webkitNotifications.createNotification(
   				'tv128.png',  // icon url - can be relative
-  				'TV!',  // notification title
+  				'Today on TV',  // notification title
   				count+' '+(count>1?'shows':'show')+' today.'  // notification body text
 			);
 		}
