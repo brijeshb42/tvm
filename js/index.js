@@ -61,7 +61,7 @@ function SearchShowsController($scope,$http){
         var d = $scope.shows[index];
         d.showid = d.tvdb_id;
         delete d["tvdb_id"];
-        tv.network.getAllData(d);
+        tv.network.getAllData(d,"save");
     };
 }
 
@@ -113,6 +113,19 @@ function ShowListController($scope,$http){
 
     $scope.status = function(st){
         return (st)?"Ended":"Continuing";
+    };
+
+    $scope.updateShow = function(index){
+        $.confirm(
+            {   message: "Reupdate "+$scope.shows[index].data.title+" ?",
+                okText: "Yes",
+                cancelText: "No",
+                onconfirm:function(){
+                    var d = $scope.shows[index].data;
+                    tv.network.getAllData(d,"update");
+                }
+            }
+        );
     };
 
     $scope.deleteShow = function(index){

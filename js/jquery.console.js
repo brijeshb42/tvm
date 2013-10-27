@@ -2,7 +2,7 @@
 
 	$.extend({
 		console: function(options){
-			var cls = "confirmDialog";
+			var cls = "consoleDialog";
 			var defaults = {
 				heading: "Please wait...",
 				message: "Default message",

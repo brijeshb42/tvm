@@ -54,7 +54,7 @@ tv.ui.formatDate =  function(date){
 		return dt;
 };
 
-tv.ui.getDataUrl = function(show,episodes,blob) {
+tv.ui.getDataUrl = function(show,episodes,blob,from) {
 	var im = URL.createObjectURL(blob);
 	var image = new Image();
 	var canvas = document.createElement("canvas");
@@ -70,7 +70,7 @@ tv.ui.getDataUrl = function(show,episodes,blob) {
     	var sho = {};
     	sho.showid = show.showid;
     	sho.img = dataURL;
-    	tv.indexedDB.addShow(show,episodes,sho);
+    	tv.indexedDB.addShow(show,episodes,sho,from);
 	};
 	image.src = im;
 };
@@ -81,7 +81,7 @@ tv.ui.getImgId = function(url){
 };
 
 
-tv.network.getAllData = function(sho){
+tv.network.getAllData = function(sho,from){
     $.console({message:"Downloading episode details."});
         $.ajax({
             url : urls.proxy+urls.api+urls.id+"/series/"+sho.showid+"/all/en.xml",
@@ -120,7 +120,7 @@ tv.network.getAllData = function(sho){
                 img.responseType = 'blob';
                 img.onload = function(){
                     $.console({message:"Poster downloaded."});
-                    tv.ui.getDataUrl(sho,episodes,this.response);
+                    tv.ui.getDataUrl(sho,episodes,this.response,from);
                 };
                 img.onerror = function(e){
                     console.log(e);
@@ -472,7 +472,12 @@ tv.indexedDB.getTodayCount = function(){
 	};
 };
 
-tv.indexedDB.addShow = function(show,episodes,img){
+tv.indexedDB.addShow = function(show,episodes,img,from){
+
+	if(from==="update"){
+		tv.indexedDB.deleteShowComplete(show.showid);
+	}
+
 	var db = tv.indexedDB.db;
 	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readwrite");
 
@@ -597,7 +602,7 @@ tv.indexedDB.getAll = function(){
 	};
 }
 
-tv.indexedDB.deleteShowComplete = function(id) {
+tv.indexedDB.deleteShowComplete = function(id,from) {
   	var db = tv.indexedDB.db;
   	var trans = db.transaction([DB_show,DB_epi,DB_img], "readwrite");
 
