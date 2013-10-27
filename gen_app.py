@@ -5,6 +5,8 @@ import shutil
 """
 make sure you have installed nodejs and its npm alogwith
 packages less and minify to compile and minify css and js.
+Also don't forget to add location of chrome to system path
+in windows.
 """
 
 APP = "tvm"
