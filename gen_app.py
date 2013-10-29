@@ -13,7 +13,7 @@ APP = "tvm"
 app = "app"
 CWD = os.getcwd()
 APP_DIR = os.path.join(CWD,APP)
-CWD = os.path.join(CWD,app)
+FILE_DIR = os.path.join(CWD,app)
 JSON_FILE = "required.json"
 
 def createAppDir():
@@ -59,6 +59,6 @@ if __name__ == "__main__":
 	createAppDir()
 	json_data = open(JSON_FILE)
 	data = json.load(json_data)
-	createFiles(CWD,APP_DIR,data);
+	createFiles(FILE_DIR,APP_DIR,data);
 	createExt(CWD,APP_DIR)
 	json_data.close()
