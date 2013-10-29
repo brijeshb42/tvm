@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "TV Show Manager",
+	"version": "1.5",
+	"description": "Easily manage your list of favourite TV Shows. Track upcoming shows and also get the overview.",
+	"app": {
+		"background": {
+			"scripts": ["background.js","js/database.min.js"]
+		}
+	},
+	"offline_enabled": true,
+	"permissions": [
+		"storage","notifications","<all_urls>"
+	],
+	"icons": { "16": "tv16.png", "48": "tv48.png", "128": "tv128.png" },
+	"update_url": "http://brijeshb42.github.io/update.xml"
+}

@@ -10,8 +10,10 @@ in windows.
 """
 
 APP = "tvm"
+app = "app"
 CWD = os.getcwd()
 APP_DIR = os.path.join(CWD,APP)
+CWD = os.path.join(CWD,app)
 JSON_FILE = "required.json"
 
 def createAppDir():
