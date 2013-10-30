@@ -12,10 +12,10 @@
 	],
 	"js": {
 		"vendor": [
-			"angular.min.js",
-			"jquery-1.10.2.min.js",
-			"jquery.mousewheel.min.js",
-			"jquery.slimscroll.min.js"
+			"angular.js",
+			"jquery.js",
+			"jquery.mousewheel.js",
+			"jquery.slimscroll.js"
 		],
 		"base": [
 			"database.min.js",
