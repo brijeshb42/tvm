@@ -1,1 +1,1 @@
-lessc -x less/main.less app/css/index.css && lessc -x less/dialog.less app/css/dialog.css && minify js/database.js app/js/database.min.js && minify js/jquery.confirm.js app/js/jquery.confirm.min.js && minify js/jquery.console.js app/js/jquery.console.min.js
+lessc -x less/main.less app/css/index.min.css && lessc -x less/dialog.less app/css/dialog.min.css && minify js/database.js app/js/database.min.js && minify js/jquery.confirm.js app/js/jquery.confirm.min.js && minify js/jquery.console.js app/js/jquery.console.min.js
