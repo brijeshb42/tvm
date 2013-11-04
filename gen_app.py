@@ -34,6 +34,7 @@ def createFiles(directory,app_dir,data):
 			else:
 				for fil in data[dirs]:
 					shutil.copyfile(os.path.join(os.path.join(directory,dirs),fil),os.path.join(os.path.join(app_dir,dirs),fil))
+
 def createExt(directory,app_dir):
 	ext_file =  os.path.join(directory,APP+".pem")
 	if os.path.exists(ext_file):
