@@ -3,7 +3,7 @@ window.IDBTransaction   = window.IDBTransaction || window.webkitIDBTransaction |
 window.IDBKeyRange 		= window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 urls = {
-    proxy : "http://b2-apps.appspot.com/",
+    proxy : "http://b2-proxy.appspot.com/",
     api : "www.thetvdb.com/api/",
     id : "C973590B1E212580",
     banner : "www.thetvdb.com/banners/",
