@@ -32,7 +32,7 @@
                         <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>
                         <p class="datetime">{{formatDate(item.data.airdate)}}&nbsp;<span class="day">({{dayType(item.data.airdate)}})</span></p>
                         <p class="overview">{{item.data.overview}}</p>
-                        <div class="controlBar" data-ng-show="showBtn($index)"><button class="btn-mini" data-ng-click="updateEpisode({{item.data.episodeID}},'{{item.data.showname}}')">Update</button></div>
+                        <div class="controlBar" data-ng-show="showBtn($index)"><button class="btn-mini" data-ng-click='updateEpisode({{item.data.episodeID}},"{{item.data.showname}}")'>Update</button></div>
                     </div>
                 </li>
                 <li class="list-item" data-ng-show="noUpcoming" style="text-align:center">
