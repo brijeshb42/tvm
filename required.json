@@ -19,7 +19,7 @@
 		],
 		"base": [
 			"database.min.js",
-			"index.js",
+			"index.min.js",
 			"jquery.confirm.min.js",
 			"jquery.console.min.js"
 		]

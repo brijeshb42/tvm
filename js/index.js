@@ -1,12 +1,12 @@
 (function($){
     $(window).load(function(){
-    	$('a').on("click",function(){
-    		return false;
-    	});
-    	$("#content").slimscroll({
-    		height: "475px",
-    		railVisible: true
-    	});
+        $('a').on("click",function(){
+            return false;
+        });
+        $("#content").slimscroll({
+            height: "475px",
+            railVisible: true
+        });
         $(document).on("contextmenu",function(e){
             e.preventDefault();
         });

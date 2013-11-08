@@ -1,0 +1,27 @@
+{
+  "name": "TV Show Manager",
+  "version": "1.5",
+  "dependencies": {
+    "less": "latest",
+    "uglify-js": "latest"
+  },
+  "homepage": "https://github.com/brijeshb42/tvm",
+  "authors": [
+    "Brijesh <brijeshb42@gmail.com>"
+  ],
+  "description": "Easily manage your list of favourite TV Shows. Track upcoming shows and also get the overview.",
+  "main": "app/manifest.json",
+  "keywords": [
+    "tv",
+    "show",
+    "series"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
