@@ -1,3 +1,27 @@
+/*
+Created by brijeshb42 for TV Show Manager chrome app.
+
+HTML scaffolding for creating custom confirm box.
+
+		<div class="consoleDialog">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="message">
+                	<p class=heading></p>
+                	<p class=console></p>
+                	<p class=console success></p>
+                	<p class=console error></p>
+                	<!-- Any of the above four -->
+                </div>
+                <div class="footer">
+                    <div class="controls">
+                        <button class="ok">OK</button><button class="error">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+*/
+
 (function($){
 
 	$.extend({
