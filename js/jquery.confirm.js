@@ -28,7 +28,8 @@ HTML scaffolding for creating custom confirm box.
 				cancelText: "Cancel",
 				overlay: true,
 				onconfirm: null,
-				oncancel: null
+				oncancel: null,
+				time: 100
 			};
 
 			var options = $.extend(defaults,options);
@@ -43,7 +44,7 @@ HTML scaffolding for creating custom confirm box.
 				if(callback){
 					callback();
 				}				
-				$box.fadeOut(300,function(){
+				$box.fadeOut(options.time,function(){
 					$(this).remove();
 				});
 				$(document).unbind("keydown");
@@ -79,7 +80,7 @@ HTML scaffolding for creating custom confirm box.
 
 			$controls.append($okBtn).append($cancelBtn).appendTo($footer);
 			$content.append($message).append($footer).appendTo($box);
-			$box.fadeIn(300);
+			$box.fadeIn(options.time);
 		}
 	});
 

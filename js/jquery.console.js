@@ -9,7 +9,8 @@
 				type: "",
 				overlay: true,
 				closeText: "Close",
-				onclose: null
+				onclose: null,
+				time: 100
 			};
 
 			var options = $.extend(defaults,options);
@@ -24,7 +25,7 @@
 				if(callback){
 					callback();
 				}				
-				$box.fadeOut(300,function(){
+				$box.fadeOut(options.time,function(){
 					$(this).remove();
 				});
 			}
@@ -53,7 +54,7 @@
 			});
 			$controls.append($cancelBtn).appendTo($footer);
 			$content.append($message).append($footer).appendTo($box);
-			$box.appendTo('body').fadeIn(300);
+			$box.appendTo('body').fadeIn(options.time);
 		}
 	});
 
