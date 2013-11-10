@@ -70,7 +70,15 @@ tv.ui.getDataUrl = function(show,episodes,blob,from) {
     	var sho = {};
     	sho.showid = show.showid;
     	sho.img = dataURL;
-    	tv.indexedDB.addShow(show,episodes,sho,from);
+    	if(from==="update"){
+    		var dat = {};
+    		dat.show = show;
+    		dat.episodes = episodes;
+    		dat.image = sho;
+    		tv.indexedDB.deleteShowComplete(show.showid,from,dat)
+    	}
+    	else
+    		tv.indexedDB.addShow(show,episodes,sho,from);
 	};
 	image.src = im;
 };
@@ -472,11 +480,7 @@ tv.indexedDB.getTodayCount = function(){
 	};
 };
 
-tv.indexedDB.addShow = function(show,episodes,img,from){
-
-	if(from==="update"){
-		tv.indexedDB.deleteShowComplete(show.showid);
-	}
+tv.indexedDB.addShow = function(show,episodes,img){
 
 	var db = tv.indexedDB.db;
 	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readwrite");
@@ -602,12 +606,16 @@ tv.indexedDB.getAll = function(){
 	};
 }
 
-tv.indexedDB.deleteShowComplete = function(id,from) {
+tv.indexedDB.deleteShowComplete = function(id,from,dat) {
   	var db = tv.indexedDB.db;
   	var trans = db.transaction([DB_show,DB_epi,DB_img], "readwrite");
 
   	trans.oncomplete = function(){
   		$.console({message:"Show deleted."})
+  		if(from==="update"){
+  			tv.indexedDB.addShow(dat.show,dat.episodes,dat.image);
+  			return;
+  		}
   		tv.indexedDB.getAll();
   	};
   	trans.onerror = function(){

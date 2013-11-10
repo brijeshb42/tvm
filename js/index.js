@@ -134,7 +134,7 @@ function ShowListController($scope,$http){
                 okText: "Yes",
                 cancelText: "No",
                 onconfirm:function(){
-                    tv.indexedDB.deleteShowComplete($scope.shows[index].data.showid);
+                    tv.indexedDB.deleteShowComplete($scope.shows[index].data.showid,"noupdate",null);
                 }
             }
         );
