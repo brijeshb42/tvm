@@ -15,15 +15,40 @@
 })(jQuery);
 
 function NavController($scope){
+
+    $scope.menuVisible = false;
     $scope.selectedNav = 0;
     $scope.navItems = [{href:"#todayList",title:"Latest"},
                        {href:"#addShow",title:"Add Shows"},
                        {href:"#showList",title:"All Shows"}];
     $scope.changeView = function(index){
         $scope.selectedNav = index;
-        if($scope.selectedNav==1){
-        }
-    }
+        /*if($scope.selectedNav==1){
+        }*/
+    };
+
+    $scope.showAppMenu = function(){
+        $scope.menuVisible = !$scope.menuVisible;
+    };
+
+    $scope.checkUpdate = function(){
+        $scope.menuVisible = false;
+        $.console({message:"Updating"});
+        var updateUrl = "https://raw.github.com/brijeshb42/tvm/master/latest.json"
+        $http({method: 'GET', url: updateUrl}).
+                success(function(data,status,header,config){
+                    $.console({message:data});
+                }).
+                error(function(data,status,header,config){
+                    $.console({message:"There was an error while retrieving version."});
+                });
+    };
+
+    $scope.about = function(){
+        $scope.menuVisible = false;
+        $.console({message:"Created by <a href='mailto:brijeshb42@gmail.com'>b2</a>"});
+    };
+
 }
 
 function SearchShowsController($scope,$http){
