@@ -41,6 +41,7 @@ HTML scaffolding for creating custom confirm box.
 
 			if($('.'+cls).length==1){
 				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
+				$('.'+cls).find('.heading').html(options.heading);
 				$('.'+cls).find('.message').append($p);
 				return;
 			}

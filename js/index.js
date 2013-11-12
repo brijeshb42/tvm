@@ -33,24 +33,24 @@ function NavController($scope,$http){
 
     $scope.checkUpdate = function(){
         $scope.menuVisible = false;
-        $.console({message:"Updating"});
+        $.console({message:"Checking for update..."});
         var updateUrl = "https://raw.github.com/brijeshb42/tvm/master/latest.json"
         $http({method: 'GET', url: updateUrl}).
                 success(function(data,status,header,config){
                     if(data.version > chrome.runtime.getManifest().version){
-                        $.console({message:"The app is the latest version."});
+                        $.console({heading:"Update Available",message:"New version is "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success"});
                     }else{
-                        $.console({message:"Latest version is "+data.version, type: "success"});
+                        $.console({heading:"No update",message:"The app is already the most recent version."});
                     }
                 }).
                 error(function(data,status,header,config){
-                    $.console({message:"There was an error while retrieving version information.", type: "error"});
+                    $.console({heading:"Error",message:"There was an error while retrieving version information.", type: "error"});
                 });
     };
 
     $scope.about = function(){
         $scope.menuVisible = false;
-        $.console({message:"Created by <a href='mailto:brijeshb42@gmail.com'>b2</a>"});
+        $.console({heading:"About",message:"App version: "+chrome.runtime.getManifest().version+"<br />Created by <a href='mailto:brijeshb42@gmail.com' target='_blank'>b2</a>."});
     };
 
 }
