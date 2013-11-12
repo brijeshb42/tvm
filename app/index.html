@@ -21,6 +21,11 @@
     <body data-ng-app data-ng-csp data-ng-controller="NavController">
         <div id="appTitle">
             <h2>TV SHOW MANAGER</h2>
+            <button data-ng-click="showAppMenu()" title="Menu" class="btn-mini icon icon-settings"></button>
+            <ul id="appMenu" data-ng-show="menuVisible==true">
+                <li data-ng-click="checkUpdate()"><button class="btn-mini icon icon-refresh"></button>&nbsp;Check For Update</li>
+                <li data-ng-click="about()"><button class="btn-mini icon icon-settings"></button>&nbsp;About</li>
+            </nav>
         </div>
         <div id="content">
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
