@@ -711,7 +711,7 @@ tv.indexedDB.updateEpisode = function(episode){
 		var cur = event.target.result;
 		var req = cur.update(episode);
 		req.onsuccess = function(){
-			$.console({heading:"Updated!!!",message:"Episode details updated.",type:"success"});
+			$.console({heading:"Updated!!!",message:"Episode details updated.",type:"success",clear:true});
 			tv.indexedDB.getAll();
 		};
 	};
