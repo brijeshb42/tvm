@@ -34,16 +34,21 @@ HTML scaffolding for creating custom confirm box.
 				overlay: true,
 				closeText: "Close",
 				onclose: null,
-				time: 100
+				time: 100,
+				clear: true
 			};
 
 			var options = $.extend(defaults,options);
 
-			if($('.'+cls).length==1){
+			if(options.clear===false && $('.'+cls).length==1){
 				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
 				$('.'+cls).find('.heading').html(options.heading);
 				$('.'+cls).find('.message').append($p);
 				return;
+			}else if(options.clear===true && $('.'+cls).length==1){
+				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
+				$heading = $('<p></p>').addClass('heading').html(options.heading);
+				$('.'+cls).find('.message').html($heading).html($p);
 			}
 
 			function dialogClosed(callback){
