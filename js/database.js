@@ -192,7 +192,7 @@ tv.network.getEpisode = function(id,showname){
                 epi.lastUpdated = $(this).find("lastupdated").text();
             });
             if(epi.overview=="" || epi.overview.length<5){
-            	$.console({heading:"Not Available",message:"Detail of this episode is not yet available."});
+            	$.console({heading:"Not Available",message:"Detail of this episode is not yet available.",clear:true});
             	return;
             }
             tv.indexedDB.updateEpisode(epi);
@@ -541,7 +541,6 @@ tv.indexedDB.getAll = function(){
 	scopeUpcoming.noUpcoming = true;
 
 	transaction.oncomplete = function(){
-		//console.log("All transaction complete.");
 		for(var key in showS){
 			showS[key].img = imgS[showS[key].data.showid].img;
 			if(showS.hasOwnProperty(key)){
