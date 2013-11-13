@@ -8,3 +8,11 @@ TV Show Manager
 * Then click on extension on the top left side.
 * Then drag and drop the downloaded file on that page.
 * Follow the instructions.
+
+**Features**
+
+*Add your shows.
+*Get overview.
+*Always be updated about next episodes and whats going to happen.
+*Easy to use interface.
+*Added check for update feature.
