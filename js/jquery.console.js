@@ -35,7 +35,7 @@ HTML scaffolding for creating custom confirm box.
 				closeText: "Close",
 				onclose: null,
 				time: 100,
-				clear: true
+				clear: false
 			};
 
 			var options = $.extend(defaults,options);
