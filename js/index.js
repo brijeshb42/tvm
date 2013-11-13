@@ -1,19 +1,3 @@
-(function($){
-    $(window).load(function(){
-        $('a').on("click",function(){
-            return false;
-        });
-        $("#content").slimscroll({
-            height: "475px",
-            railVisible: true
-        });
-        $(document).on("contextmenu",function(e){
-            e.preventDefault();
-        });
-        tv.indexedDB.open();
-    });
-})(jQuery);
-
 function NavController($scope,$http){
 
     $scope.menuVisible = false;
@@ -23,8 +7,6 @@ function NavController($scope,$http){
                        {href:"#showList",title:"All Shows"}];
     $scope.changeView = function(index){
         $scope.selectedNav = index;
-        /*if($scope.selectedNav==1){
-        }*/
     };
 
     $scope.showAppMenu = function(){
@@ -212,3 +194,22 @@ function ShowInfoController($scope){
         return "Premiered on: "+tv.ui.formatDate(date);
     };
 }
+
+
+/* JQuery functions */
+
+(function($){
+    $(window).load(function(){
+        $('a').on("click",function(){
+            return false;
+        });
+        $("#content").slimscroll({
+            height: "475px",
+            railVisible: true
+        });
+        $(document).on("contextmenu",function(e){
+            e.preventDefault();
+        });
+        tv.indexedDB.open();
+    });
+})(jQuery);

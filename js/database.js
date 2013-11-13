@@ -8,7 +8,7 @@ urls = {
     id : "C973590B1E212580",
     banner : "www.thetvdb.com/banners/",
     search : "GetSeries.php",
-    update : "https://dl.dropbox.com/u/51320501/tv-version.json",
+    update : "https://raw.github.com/brijeshb42/tvm/master/latest.json",
     trakt : "http://api.trakt.tv/",
     trakt_api : "b3795664d41ef84ecdbf1dae6dfab099",
     img_url : "slurm.trakt.us/"
@@ -96,7 +96,6 @@ tv.network.getAllData = function(sho,from){
             type: "GET",
             dataType: "xml",
             success: function(data){
-                $.console({message:"Episode details downloaded."});
                 var show = {};
                 $(data).find("Series").each(function(){
                     show.showid = $(this).find("id").text();
@@ -179,14 +178,14 @@ tv.network.getEpisode = function(id,showname){
                 epi.lastUpdated = $(this).find("lastupdated").text();
             });
             if(epi.overview=="" || epi.overview.length<5){
-            	$.console({message:"Detail of this episode is not yet available."});
+            	$.console({heading:"Not Available",message:"Detail of this episode is not yet available."});
             	return;
             }
             tv.indexedDB.updateEpisode(epi);
             //console.log(epi);
 		},
 		error: function(){
-			$.console({message:"Episode details could not be downloaded.",type:"error"});
+			$.console({heading:"Error!",message:"Episode details could not be downloaded.",type:"error"});
 		}
 	});
 };
@@ -486,7 +485,7 @@ tv.indexedDB.addShow = function(show,episodes,img){
 	var transaction = db.transaction([DB_show,DB_epi,DB_img],"readwrite");
 
 	transaction.oncomplete = function(e){
-		$.console({message:"Show "+show.title+" saved. You can now close this box.",type:"success"});
+		$.console({heading:show.title+" added",message:"You can now close this box.",type:"success",clear:true});
 		var scope = angular.element($("#addShow")).scope();
 		scope.shows = [];
 		scope.isShown = false;
@@ -611,7 +610,7 @@ tv.indexedDB.deleteShowComplete = function(id,from,dat) {
   	var trans = db.transaction([DB_show,DB_epi,DB_img], "readwrite");
 
   	trans.oncomplete = function(){
-  		$.console({message:"Show deleted."})
+  		$.console({heading:"Deleted",message:"Show deleted."})
   		if(from==="update"){
   			tv.indexedDB.addShow(dat.show,dat.episodes,dat.image);
   			return;
@@ -712,7 +711,7 @@ tv.indexedDB.updateEpisode = function(episode){
 		var cur = event.target.result;
 		var req = cur.update(episode);
 		req.onsuccess = function(){
-			$.console({message:"Episode details updated.",type:"success"});
+			$.console({heading:"Updated!!!",message:"Episode details updated.",type:"success"});
 			tv.indexedDB.getAll();
 		};
 	};
