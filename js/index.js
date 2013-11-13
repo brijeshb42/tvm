@@ -195,6 +195,19 @@ function ShowInfoController($scope){
     };
 }
 
+function checkUpdateBackground(){
+    $.ajax({
+        url : urls.update,
+        type: "GET",
+        dataType: "json",
+        success: function(data){
+            if(data.version > chrome.runtime.getManifest().version){
+                $.console({heading:"Update Available",message:"New version "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success", clear:true});
+            }
+        }
+    });
+}
+
 
 /* JQuery functions */
 
@@ -211,5 +224,6 @@ function ShowInfoController($scope){
             e.preventDefault();
         });
         tv.indexedDB.open();
+        setTimeout(function(){checkUpdateBackground()},5000);
     });
 })(jQuery);
