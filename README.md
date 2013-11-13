@@ -11,8 +11,8 @@ TV Show Manager
 
 **Features**
 
-*Add your shows.
-*Get overview.
-*Always be updated about next episodes and whats going to happen.
-*Easy to use interface.
-*Added check for update feature.
+* Add your shows.
+* Get overview.
+* Always be updated about next episodes and whats going to happen.
+* Easy to use interface.
+* Added check for update feature.
