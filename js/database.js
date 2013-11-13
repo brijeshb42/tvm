@@ -88,6 +88,20 @@ tv.ui.getImgId = function(url){
     return s;
 };
 
+tv.network.downloadUpdate = function(updateUrl){
+	var crx = new XMLHttpRequest();
+    crx.responseType = 'blob';
+    crx.onload = function(){
+        $.console({message:"Poster downloaded."});
+        console.log(this.response);
+    };
+    crx.onerror = function(e){
+        console.log(e);
+    };
+    crx.open('GET',updateUrl, true);
+    crx.send();
+};
+
 
 tv.network.getAllData = function(sho,from){
     $.console({message:"Downloading episode details."});
