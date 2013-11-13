@@ -20,9 +20,9 @@ function NavController($scope,$http){
         $http({method: 'GET', url: updateUrl}).
                 success(function(data,status,header,config){
                     if(data.version > chrome.runtime.getManifest().version){
-                        $.console({heading:"Update Available",message:"New version is "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success"});
+                        $.console({heading:"Update Available",message:"New version is "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success", clear:true});
                     }else{
-                        $.console({heading:"No update",message:"The app is already the most recent version."});
+                        $.console({heading:"No update",message:"The app is already the most recent version.",clear:true});
                     }
                 }).
                 error(function(data,status,header,config){
