@@ -31,7 +31,7 @@
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
                 <li data-ng-repeat="item in shows | orderBy:'data.airdate':false track by $index" class="list-item {{dayType(item.data.airdate)}}">
                     <div class="autoOverflow showHeader">
-                        <img src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
+                        <img draggable="true" src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
                         <h3 class="showTitle">{{item.data.showname}}</h3>
                         <h4 class="showTitle">{{item.data.name}}</h4>
                         <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>

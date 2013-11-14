@@ -208,6 +208,31 @@ function checkUpdateBackground(){
     });
 }
 
+function makeDroppable(){
+    var dropzone = document.getElementById("content");
+
+    dropzone.ondragover = function(){
+        return false;
+    };
+    dropzone.ondragend = function(){
+        return false;
+    };
+    dropzone.ondrop = function(e){
+        console.log(e);
+        e.preventDefault();
+        var file = e.dataTransfer.files[0];
+        $.console({message:file.name})
+        /*var reader = new FileReader();
+        reader.onload = function(event){
+            console.log(event.target);
+            dropzone.innerHTML = "";
+            dropzone.style.background = 'url(' + event.target.result + ') no-repeat center';
+        };*/
+        console.log(file);
+        /*reader.readAsDataURL(file);*/
+        return false;
+    };
+}
 
 /* JQuery functions */
 
@@ -224,6 +249,7 @@ function checkUpdateBackground(){
             e.preventDefault();
         });
         tv.indexedDB.open();
+        makeDroppable();
         setTimeout(function(){checkUpdateBackground()},5000);
     });
 })(jQuery);
