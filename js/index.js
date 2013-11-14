@@ -32,7 +32,7 @@ function NavController($scope,$http){
 
     $scope.about = function(){
         $scope.menuVisible = false;
-        $.console({heading:"About",message:"App version: "+chrome.runtime.getManifest().version+"<br />Created by <a href='mailto:brijeshb42@gmail.com' target='_blank'>b2</a>."});
+        $.console({heading:"About",message:"App version: "+chrome.runtime.getManifest().version+"<br />Created by <a href='mailto:brijeshb42@gmail.com' target='_blank'>b2</a>.<br /><a href='http://goo.gl/gxoEAD' target='_blank'>Visit app website.</a>"});
     };
 
 }
