@@ -1,3 +1,5 @@
+/* AngularJS start */
+
 function NavController($scope,$http){
 
     $scope.menuVisible = false;
@@ -195,6 +197,8 @@ function ShowInfoController($scope){
     };
 }
 
+/* Angular js end*/
+
 function checkUpdateBackground(){
     $.ajax({
         url : urls.update,
@@ -222,14 +226,7 @@ function makeDroppable(){
         e.preventDefault();
         var file = e.dataTransfer.files[0];
         $.console({message:file.name})
-        /*var reader = new FileReader();
-        reader.onload = function(event){
-            console.log(event.target);
-            dropzone.innerHTML = "";
-            dropzone.style.background = 'url(' + event.target.result + ') no-repeat center';
-        };*/
-        console.log(file);
-        /*reader.readAsDataURL(file);*/
+        //console.log(file);
         return false;
     };
 }
