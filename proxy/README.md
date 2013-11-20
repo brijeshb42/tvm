@@ -1,6 +1,6 @@
 # Auto ByPass
 
-## Automatically bypass urls that are blocked by Cyberoam.
+## Automatically bypass urls that are blocked by Cyberoam (exclusively for BITians).
 ==========================================================
 
 To use this extension:-
