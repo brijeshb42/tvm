@@ -13,3 +13,5 @@ To use this extension:-
 * Use and enjoy.
 
 ### This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
+
+Link for this page: [Auto Bypass](http://goo.gl/c969Qa)
