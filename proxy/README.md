@@ -5,7 +5,7 @@
 
 To use this extension:-
 
-* Download the .crx file [here](http://goo.gl/adqX46).
+* Download the .crx file <a href ="http://goo.gl/adqX46" target="_blank">here</a>.
 * Open the setting page in Google Chrome.
 * Click on "Extensions" on top left.
 * Drag and drop the downloaded file on "extensions" page.
