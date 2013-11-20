@@ -91,6 +91,33 @@ function UpcomingController($scope){
         return tv.ui.formatDate(date);
     };
 
+    $scope.init = function() {
+        chrome.storage.local.get("date",function(d){
+            console.log("first");
+            console.log(d);
+            if(d.date){
+                console.log("2nd");
+                console.log(d);
+                if(d.date<tv.ui.getDate()){
+                    console.log("3rd");
+                    console.log(d);
+                    chrome.storage.local.set({"date":tv.ui.getDate()});
+                    var sc = $scope.shows;
+                    if(sc.length>0){
+                        for(var i=0;i<sc.length;i++){
+                            if(sc[i].data.overview.length<1){
+                                tv.network.getEpisode(sc[i].data.episodeID,sc[i].data.showname,"back");
+                            }
+                        }
+                    }
+                }
+            }else{
+                chrome.storage.local.set({"date":tv.ui.getDate()});
+            }
+        });
+        
+    };
+
     $scope.dayType = function(date){
         var dt = tv.ui.getDate(0);
         var day = "";
@@ -111,6 +138,7 @@ function UpcomingController($scope){
         //console.log(index);
         tv.network.getEpisode(id,showname);
     };
+    //$scope.init();
 }
 
 function ShowListController($scope,$http){
@@ -207,6 +235,11 @@ function checkUpdateBackground(){
         success: function(data){
             if(data.version > chrome.runtime.getManifest().version){
                 $.console({heading:"Update Available",message:"New version "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success", clear:true});
+                if(data.changelog){
+                    for(var i=0;i<data.changelog.length;i++){
+                        $.console({message:data.changelog[i]});
+                    }
+                }
             }
         }
     });

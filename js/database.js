@@ -170,8 +170,9 @@ tv.network.getPoster = function(showid,url){
     img.send();
 };
 
-tv.network.getEpisode = function(id,showname){
-	$.console({message:"Updating episode information."});
+tv.network.getEpisode = function(id,showname,from){
+	if(!from || from!=="back")
+		$.console({message:"Updating episode information."});
 	var URL = urls.proxy+urls.api+urls.id+"/episodes/"+id+"/en.xml";
 	$.ajax({
 		url: URL,
@@ -191,14 +192,18 @@ tv.network.getEpisode = function(id,showname){
                 epi.episode = $(this).find("EpisodeNumber").text();
                 epi.lastUpdated = $(this).find("lastupdated").text();
             });
-            if(epi.overview=="" || epi.overview.length<5){
+            if(epi.overview=="" || epi.overview.length<1){
+            	if(from && from==="back")
+            		return;
             	$.console({heading:"Not Available",message:"Detail of this episode is not yet available.",clear:true});
             	return;
             }
-            tv.indexedDB.updateEpisode(epi);
+            tv.indexedDB.updateEpisode(epi,from);
             //console.log(epi);
 		},
 		error: function(){
+			if(from && from==="back")
+            	return;
 			$.console({heading:"Error!",message:"Episode details could not be downloaded.",type:"error"});
 		}
 	});
@@ -364,6 +369,7 @@ tv.indexedDB.getAll = function(){
 			scopeUpcoming.shows = epi;
 			if(scopeUpcoming.shows.length>0){
 				scopeUpcoming.noUpcoming = false;
+				setTimeout(function(){scopeUpcoming.init();},7000);
 			}
 			else{
 				scopeUpcoming.noUpcoming = true;
@@ -521,7 +527,7 @@ tv.indexedDB.exists = function(showid){
 	};
 };
 
-tv.indexedDB.updateEpisode = function(episode){
+tv.indexedDB.updateEpisode = function(episode,from){
 	var db = tv.indexedDB.db;
 	var transaction = db.transaction([DB_epi],"readwrite");
 	var store = transaction.objectStore(DB_epi);
@@ -531,8 +537,10 @@ tv.indexedDB.updateEpisode = function(episode){
 		var cur = event.target.result;
 		var req = cur.update(episode);
 		req.onsuccess = function(){
-			$.console({heading:"Updated!!!",message:"Episode details updated.",type:"success",clear:true});
-			tv.indexedDB.getAll();
+			if(from!=="back"){
+				$.console({heading:"Updated!!!",message:"Episode details updated.",type:"success",clear:true});
+				tv.indexedDB.getAll();
+			}
 		};
 	};
 };
