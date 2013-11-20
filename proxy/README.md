@@ -11,3 +11,5 @@ To use this extension:-
 * Drag and drop the downloaded file on "extensions" page.
 * Goto any blocked site to see the demo.
 * Use and enjoy.
+
+### This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
