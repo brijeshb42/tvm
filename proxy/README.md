@@ -16,3 +16,5 @@ To use this extension:-
 ####This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
 
 Link to this page: [Auto Bypass](http://goo.gl/c969Qa)
+
+Nothing magical in the extension. It simply passes the current blocked url to a proxy app hosted on Google Appengine which does the heavy lifting.
