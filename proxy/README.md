@@ -3,7 +3,7 @@
 ## Automatically bypass urls that are blocked by Cyberoam (exclusively for BITians).
 ==========================================================
 
-To use this extension:-
+## Instructions
 
 * Download the .crx file <a class="minibutton" href="http://goo.gl/adqX46" target="_blank">here</a>.
 * Open the setting page in Google Chrome.
