@@ -1,6 +1,6 @@
 To use this extension:-
 
-* Download the .crx file [here](https://raw.github.com/brijeshb42/tvm/master/proxy/proxy.crx).
+* Download the .crx file [here](http://goo.gl/adqX46).
 * Open the setting page in Google Chrome.
 * Click on "Extensions" on top left.
 * Drag and drop the downloaded file on "extensions" page.
