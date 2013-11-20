@@ -1,0 +1,16 @@
+{
+	"manifest_version": 2,
+	"name": "Auto ByPass",
+	"version": "1.0",
+	"description": "Automatically bypass urls that are blocked by Cyberoam.",
+	"content_scripts": [{
+			"matches": ["http://*/*"],
+			"js": ["bypass.js"]
+		}
+	],
+	"icons": {
+		"16": "proxy16.png",
+		"48": "proxy48.png",
+		"128": "proxy128.png"
+	}
+}
