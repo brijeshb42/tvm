@@ -237,7 +237,7 @@ function checkUpdateBackground(){
                 $.console({heading:"Update Available",message:"New version "+data.version+" is available for download <a href='"+data.url+"' target='_blank'>here</a>", type: "success", clear:true});
                 if(data.changelog){
                     for(var i=0;i<data.changelog.length;i++){
-                        $.console({message:data.changelog[i]});
+                        $.console({heading:"Update Available",message:data.changelog[i]});
                     }
                 }
             }
