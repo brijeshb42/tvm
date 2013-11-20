@@ -9,7 +9,6 @@ To use this extension:-
 * Open the setting page in Google Chrome.
 * Click on "Extensions" on top left.
 * Drag and drop the downloaded file on "extensions" page.
-####Or you can type "chrome://extensions" in address bar of chrome.
 * Goto any blocked site to see the demo.
 * Use and enjoy.
 
