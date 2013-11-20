@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "TV Show Manager",
-	"version": "1.7",
+	"version": "1.7.1",
 	"description": "Easily manage your list of favourite TV Shows. Track upcoming shows and also get the overview.",
 	"app": {
 		"background": {
