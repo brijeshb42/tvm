@@ -1,7 +1,7 @@
 # Auto ByPass
 
 ## Automatically bypass urls that are blocked by Cyberoam.
-=
+==========================================================
 
 To use this extension:-
 
@@ -14,4 +14,4 @@ To use this extension:-
 
 ### This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
 
-Link for this page: [Auto Bypass](http://goo.gl/c969Qa)
+Link to this page: [Auto Bypass](http://goo.gl/c969Qa)
