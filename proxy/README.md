@@ -1,3 +1,8 @@
+# Auto ByPass
+
+## Automatically bypass urls that are blocked by Cyberoam.
+=
+
 To use this extension:-
 
 * Download the .crx file [here](http://goo.gl/adqX46).
