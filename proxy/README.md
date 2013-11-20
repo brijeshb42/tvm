@@ -13,6 +13,6 @@ To use this extension:-
 * Goto any blocked site to see the demo.
 * Use and enjoy.
 
-### This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
+####This extension/website can only serve you "GET" requests. No form data or "POST" requests can be submitted.
 
 Link to this page: [Auto Bypass](http://goo.gl/c969Qa)
