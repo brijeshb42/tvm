@@ -107,14 +107,8 @@ function UpcomingController($scope){
 
     $scope.init = function() {
         chrome.storage.local.get("date",function(d){
-            console.log("first");
-            console.log(d);
             if(d.date){
-                console.log("2nd");
-                console.log(d);
                 if(d.date<tv.ui.getDate()){
-                    console.log("3rd");
-                    console.log(d);
                     chrome.storage.local.set({"date":tv.ui.getDate()});
                     var sc = $scope.shows;
                     if(sc.length>0){
