@@ -9,6 +9,7 @@ function NavController($scope,$http){
                        {href:"#showList",title:"All Shows"}];
     $scope.changeView = function(index){
         $scope.selectedNav = index;
+        setTimeout(function(){ $("#searchShow").focus();},200);
     };
 
     $scope.showAppMenu = function(){

@@ -315,6 +315,7 @@ tv.indexedDB.addShow = function(show,episodes,img){
 		var scope = angular.element($("#addShow")).scope();
 		scope.shows = [];
 		scope.isShown = false;
+		scope.searchName = "";
 		tv.indexedDB.getAll();
 	};
 

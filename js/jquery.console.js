@@ -86,6 +86,7 @@ HTML scaffolding for creating custom confirm box.
 			$controls.append($cancelBtn).appendTo($footer);
 			$content.append($message).append($footer).appendTo($box);
 			$box.appendTo('body').fadeIn(options.time);
+			$cancelBtn.focus();
 		}
 	});
 
