@@ -7,6 +7,21 @@ function NavController($scope,$http){
     $scope.navItems = [{href:"#todayList",title:"Latest"},
                        {href:"#addShow",title:"Add Shows"},
                        {href:"#showList",title:"All Shows"}];
+
+    $scope.menuItems = [{icon:"icon-refresh",title:"Check for Update"},
+                        {icon:"icon-about",title:"About"}];
+
+    $scope.doFunction = function(index){
+        $scope.menuVisible = false;
+        switch(index){
+            case 0: $scope.checkUpdate();
+                    break;
+            case 1: $scope.about();
+                    break;
+            default: break;
+        }
+    };
+
     $scope.changeView = function(index){
         $scope.selectedNav = index;
         setTimeout(function(){ $("#searchShow").focus();},200);
@@ -17,7 +32,6 @@ function NavController($scope,$http){
     };
 
     $scope.checkUpdate = function(){
-        $scope.menuVisible = false;
         $.console({message:"Checking for update..."});
         var updateUrl = "https://raw.github.com/brijeshb42/tvm/master/latest.json"
         $http({method: 'GET', url: updateUrl}).
@@ -34,7 +48,6 @@ function NavController($scope,$http){
     };
 
     $scope.about = function(){
-        $scope.menuVisible = false;
         $.console({heading:"About",message:"App version: "+chrome.runtime.getManifest().version+"<br />Created by <a href='mailto:brijeshb42@gmail.com' target='_blank'>b2</a>.<br /><a href='http://goo.gl/gxoEAD' target='_blank'>Visit app website.</a>"});
     };
 
