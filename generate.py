@@ -35,7 +35,7 @@ def createFiles(directory,app_dir,data):
 				for fil in data[dirs]:
 					shutil.copyfile(os.path.join(os.path.join(directory,dirs),fil),os.path.join(os.path.join(app_dir,dirs),fil))
 
-def createExt(directory,app_dir):
+def createExtension(directory,app_dir):
 	ext_file =  os.path.join(directory,APP+".pem")
 	if os.path.exists(ext_file):
 		if not os.path.isdir(ext_file):
@@ -61,5 +61,5 @@ if __name__ == "__main__":
 	json_data = open(JSON_FILE)
 	data = json.load(json_data)
 	createFiles(FILE_DIR,APP_DIR,data);
-	createExt(CWD,APP_DIR)
+	createExtension(CWD,APP_DIR)
 	json_data.close()

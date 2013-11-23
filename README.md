@@ -17,3 +17,4 @@ TV Show Manager
 * Always be updated about next episodes and whats going to happen.
 * Easy to use interface.
 * Added check for update feature.
+* Auto-update of show overviews.
