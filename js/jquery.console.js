@@ -26,10 +26,12 @@ HTML scaffolding for creating custom confirm box.
 
 	$.extend({
 		console: function(options){
-			var cls = "consoleDialog";
+
+			var cls = "promptDialog";
+			
 			var defaults = {
-				heading: "Please wait...",
-				message: "Default message",
+				heading: "Enter value",
+				message: "Value",
 				type: "",
 				overlay: true,
 				closeText: "Close",
@@ -40,17 +42,8 @@ HTML scaffolding for creating custom confirm box.
 
 			var options = $.extend(defaults,options);
 
-			if(options.clear===false && $('.'+cls).length==1){
-				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
-				$('.'+cls).find('.heading').html(options.heading);
-				$('.'+cls).find('.message').append($p);
-				return;
-			}else if(options.clear===true && $('.'+cls).length==1){
-				$p = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
-				$heading = $('<p></p>').addClass('heading').html(options.heading);
-				$('.'+cls).find('.message').html($heading).append($p);
-				return;
-			}
+			if($('.'+cls).length>0)
+				$('.'+cls).remove();
 
 			function dialogClosed(callback){
 				if(callback){
@@ -61,9 +54,6 @@ HTML scaffolding for creating custom confirm box.
 				});
 			}
 
-			if($('.'+cls).length>0)
-				$('.'+cls).remove();
-
 			var $box = $('<div></div>').addClass(cls).hide();
 
 			if(options.overlay && options.overlay===true){
@@ -73,6 +63,8 @@ HTML scaffolding for creating custom confirm box.
 			//.appendTo($('body'));
 			$content = $('<div></div>').addClass('content');
 			$message = $('<div></div>').addClass('message');
+			$form = $('<form></form>');
+			$inp = $()
 			$heading = $('<p></p>').addClass('heading').html(options.heading);
 			$log = $('<p></p>').addClass('console').addClass(options.type).html(options.message);
 			$message.append($heading).append($log);

@@ -20,13 +20,16 @@
 		"base": [
 			"database.min.js",
 			"index.min.js",
+			"auth.min.js",
 			"jquery.confirm.min.js",
-			"jquery.console.min.js"
+			"jquery.console.min.js",
+			"jquery.prompt.min.js"
 		]
 	},
 	"base": [
 		"background.js",
 		"index.html",
+		"dropbox.html",
 		"manifest.json",
 		"tv128.png",
 		"tv16.png",

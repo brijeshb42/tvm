@@ -11,7 +11,8 @@ urls = {
     update : "https://raw.github.com/brijeshb42/tvm/master/latest.json",
     trakt : "http://api.trakt.tv/",
     trakt_api : "b3795664d41ef84ecdbf1dae6dfab099",
-    img_url : "slurm.trakt.us/"
+    img_url : "slurm.trakt.us/",
+    dropbox_auth : "https://www.dropbox.com/1/oauth2/authorize?client_id=8zoic1cz1npxp3z&response_type=code"
 };
 
 u = {

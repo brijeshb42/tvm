@@ -10,7 +10,7 @@
 	},
 	"offline_enabled": true,
 	"permissions": [
-		"fileSystem","storage","notifications","<all_urls>"
+		"webview","fileSystem","storage","notifications","<all_urls>"
 	],
 	"icons": {
 		"16": "tv16.png",

@@ -1,7 +1,7 @@
 @import "variables";
 @import "mixins";
 
-.confirmDialog,.consoleDialog{
+.confirmDialog,.consoleDialog,.promptDialog{
 	.overlay{
 		position: fixed;
 		background: #000;
@@ -43,6 +43,19 @@
 		}
 		p.success{
 			color: @color-today;
+		}
+		.promptInput{
+			margin-top: 5px;
+			width: 95%;
+			padding: 2px 4px;
+			border: 2px solid #227CAF;
+			min-height: 25px;
+			font-size: 1.3em;
+			font-family: 'Prosto One';
+			color: rgb(228, 69, 69);
+		}
+		.promptInput:focus{
+			outline: 0;
 		}
 	}
 	.footer{

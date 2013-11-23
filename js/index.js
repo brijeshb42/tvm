@@ -272,6 +272,24 @@ function makeDroppable(){
     };
 }
 
+function createNewWindow(){
+    chrome.app.window.create('dropbox.html',{
+        id: "authWindow",
+        bounds: {
+            width: 1050,
+            height: 700
+        },
+        resizable: true
+    });
+}
+
+/*chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log(request);
+    console.log("sender");
+    console.log(sender);
+  });*/
+
 /* JQuery functions */
 
 (function($){
