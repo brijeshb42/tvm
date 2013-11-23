@@ -375,7 +375,7 @@ tv.indexedDB.getAll = function(){
 			}
 			else{
 				scopeUpcoming.noUpcoming = true;
-				scopeUpcoming.info = "No upcoming shows.";
+				scopeUpcoming.info = "No upcoming shows. Add one now.";
 			}
 		});
 		scopeAll.$apply(function(){
