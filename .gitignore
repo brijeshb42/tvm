@@ -5,3 +5,4 @@ tvm/
 *.sublime-project
 *.sublime-workspace
 bower_components/
+*.pem
