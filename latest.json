@@ -1,8 +1,8 @@
 {
-	"version": "1.7.2",
+	"version": "1.7.3",
 	"url" : "https://raw.github.com/brijeshb42/tvm/master/tvm.crx",
 	"alias" : "http://goo.gl/qx8mS0",
 	"changelog": [
-		"Minor tweaks regarding input and button focus."
+		"Dropbox sync added for testing. Not available directly though."
 	]
 }
