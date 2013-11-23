@@ -26,7 +26,14 @@ HTML scaffolding for creating custom confirm box.
 
 	$.extend({
 		console: function(options){
+
 			var cls = "consoleDialog";
+
+			if(typeof options==='string' && options==='close'){
+				$('.'+cls).remove();
+				return;
+			}
+			
 			var defaults = {
 				heading: "Please wait...",
 				message: "Default message",
