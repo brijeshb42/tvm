@@ -273,6 +273,15 @@ function makeDroppable(){
 }
 
 function createNewWindow(){
+    $.prompt({
+        message: "Enter auth code:",
+        onconfirm: function(code){
+            $.console({message:code});
+        },
+        oncancel: function(){
+            $.console({heading:"Error",message:"To sync, you need to enter the code."});
+        }
+    });
     chrome.app.window.create('dropbox.html',{
         id: "authWindow",
         bounds: {
