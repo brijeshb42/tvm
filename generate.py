@@ -50,7 +50,7 @@ def createExtension(directory,app_dir):
 		else:
 			os.system("chrome --pack-extension="+app_dir)
 	shutil.rmtree(APP_DIR)
-	print "Extension created."
+	print("Extension created.")
 
 if __name__ == "__main__":
 	if os.name=="posix":
