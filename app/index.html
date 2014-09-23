@@ -27,7 +27,7 @@
             <ul data-ng-controller="UpcomingController" id="todayList" class="show-list" data-ng-show="selectedNav==0">
                 <li data-ng-repeat="item in shows | orderBy:'data.airdate':false track by $index" class="list-item {{dayType(item.data.airdate)}}">
                     <div class="autoOverflow showHeader">
-                        <img draggable="true" src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
+                        <img draggable="true" data-ng-src="{{item.img}}" alt="{{item.data.showname}}" class="showImg">
                         <h3 class="showTitle">{{item.data.showname}}</h3>
                         <h4 class="showTitle">{{item.data.name}}</h4>
                         <p class="nextShow">Season&nbsp;{{item.data.season}}&nbsp;Episode&nbsp;{{item.data.episode}}</p>
@@ -70,7 +70,7 @@
                             <button data-ng-click="showInfo($index)" title="View Full Info" class="btn-mini icon icon-info"></button>
                             <button data-ng-click="updateShow($index)" title="Reupdate show" class="btn-mini icon icon-refresh"></button>
                         </div>
-                        <img src="{{item.img}}" alt="{{item.data.title}}" class="showImg showImgSmall">
+                        <img data-ng-src="{{item.img}}" alt="{{item.data.title}}" class="showImg showImgSmall">
                         <h3 class="showTitle">{{item.data.title}}</h3>
                         <p class="nextShow">{{item.data.air_day}}&nbsp;{{item.data.air_time}}&nbsp;on&nbsp;{{item.data.network}}</p>
                         <p class="overview">{{status(item.data.ended)}}</p>
@@ -84,7 +84,7 @@
             <div id="showInfo" class="show-list" data-ng-show="selectedNav==3" data-ng-controller="ShowInfoController">
                 <h2 style="margin:5px;margin-left:20px;">{{show.data.title}}<button class="btn-mini" style="float:right" data-ng-click="getBack()">&lt;&nbsp;Back</button></h2>
                 <div class="autoOverflow showHeader">
-                    <img src="{{show.img}}" alt="{{show.data.title}}" class="bigImage">
+                    <img data-ng-src="{{show.img}}" alt="{{show.data.title}}" class="bigImage">
                     <div class="showDetails">
                         <p class="nextShow">{{show.data.air_day}}&nbsp;{{show.data.air_time}}</p>
                         <p class="status">Status: {{status(show.data.ended)}}</p>
